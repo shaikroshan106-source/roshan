@@ -1,0 +1,163 @@
+[
+  {
+    "farmerId": "user_farmer_1789048161947",
+    "aadhaarVerified": false,
+    "farmAddress": {
+      "village": "Anakapalli",
+      "district": "Anakapalli",
+      "state": "Andhra Pradesh"
+    },
+    "nearestMandi": "Anakapalli Central Rythu Mandi",
+    "totalAcreage": 5,
+    "cropsCultivated": [
+      "Sugarcane",
+      "Jaggery",
+      "Tomato"
+    ],
+    "totalLotsListed": 1,
+    "totalVolumeSold": 0,
+    "totalRevenue": 0,
+    "farmerRating": 5,
+    "createdAt": "2026-09-10T13:49:25.005Z",
+    "updatedAt": "2026-09-10T13:49:27.955Z",
+    "id": "user_farmer_1789048161947"
+  },
+  {
+    "farmerId": "user_farmer_1789047345415",
+    "aadhaarVerified": false,
+    "farmAddress": {
+      "village": "Kurnool",
+      "district": "Kurnool",
+      "state": "Andhra Pradesh"
+    },
+    "nearestMandi": "Kurnool Central Rythu Mandi",
+    "totalAcreage": 5,
+    "cropsCultivated": [
+      "Tomato",
+      "Chilli"
+    ],
+    "totalLotsListed": 0,
+    "totalVolumeSold": 0,
+    "totalRevenue": 0,
+    "farmerRating": 5,
+    "createdAt": "2026-09-10T13:35:48.475Z",
+    "updatedAt": "2026-09-10T13:35:48.475Z",
+    "id": "user_farmer_1789047345415"
+  },
+  {
+    "farmerId": "demo_farmer_1",
+    "farmAddress": {
+      "village": "Vizag",
+      "district": "Vizag",
+      "state": "Andhra Pradesh"
+    },
+    "nearestMandi": "Kurnool Agricultural Market Yard",
+    "totalAcreage": 18.5,
+    "cropsCultivated": [
+      "Tomato",
+      "Chilli"
+    ],
+    "totalLotsListed": 6,
+    "totalVolumeSold": 0,
+    "totalRevenue": 0,
+    "farmerRating": 5,
+    "createdAt": "2026-09-10T12:14:55.909Z",
+    "updatedAt": "2026-09-10T12:29:03.146Z",
+    "id": "demo_farmer_1",
+    "acreage": 18.5
+  },
+  {
+    "farmerId": "user_farmer_1789041818230",
+    "aadhaarVerified": false,
+    "farmAddress": {
+      "village": "Tenali, Guntur District",
+      "district": "Tenali, Guntur District",
+      "state": "Andhra Pradesh"
+    },
+    "nearestMandi": "Tenali, Guntur District Central Rythu Mandi",
+    "totalAcreage": 5,
+    "cropsCultivated": [
+      "Chilli",
+      "Turmeric",
+      "Cotton"
+    ],
+    "totalLotsListed": 0,
+    "totalVolumeSold": 0,
+    "totalRevenue": 0,
+    "farmerRating": 5,
+    "createdAt": "2026-09-10T12:03:38.231Z",
+    "updatedAt": "2026-09-10T12:03:38.231Z",
+    "id": "user_farmer_1789041818230"
+  },
+  {
+    "farmerId": "user_farmer_1789041625846",
+    "aadhaarVerified": false,
+    "farmAddress": {
+      "village": "Kakinada",
+      "district": "Kakinada",
+      "state": "Andhra Pradesh"
+    },
+    "nearestMandi": "Kakinada Central Rythu Mandi",
+    "totalAcreage": 5,
+    "cropsCultivated": [
+      "Rice",
+      "Maize"
+    ],
+    "totalLotsListed": 0,
+    "totalVolumeSold": 0,
+    "totalRevenue": 0,
+    "farmerRating": 5,
+    "createdAt": "2026-09-10T12:00:25.847Z",
+    "updatedAt": "2026-09-10T12:00:25.847Z",
+    "id": "user_farmer_1789041625846"
+  },
+  {
+    "farmerId": "farmer_lakshmi",
+    "aadhaarVerified": true,
+    "farmAddress": {
+      "village": "Tenali Delta",
+      "mandal": "Tenali",
+      "district": "Guntur",
+      "pincode": "522201"
+    },
+    "nearestMandi": "Guntur Mirchi & Grain Mandi",
+    "totalAcreage": 22,
+    "cropsCultivated": [
+      "Rice",
+      "Cotton",
+      "Maize"
+    ],
+    "totalLotsListed": 8,
+    "totalVolumeSold": 42000,
+    "totalRevenue": 512000,
+    "farmerRating": 4.8,
+    "createdAt": "2026-09-02T09:00:00.000Z",
+    "updatedAt": "2026-09-10T11:56:58.759Z",
+    "id": "farmer_lakshmi"
+  },
+  {
+    "farmerId": "farmer_ravi",
+    "aadhaarVerified": true,
+    "farmAddress": {
+      "village": "Anandapuram",
+      "mandal": "Bheemunipatnam",
+      "district": "Visakhapatnam",
+      "pincode": "530052"
+    },
+    "nearestMandi": "Kurnool Agricultural Market Yard",
+    "totalAcreage": 18.5,
+    "cropsCultivated": [
+      "Tomato",
+      "Chilli",
+      "Rice"
+    ],
+    "totalLotsListed": 19,
+    "totalVolumeSold": 28500,
+    "totalRevenue": 245000,
+    "farmerRating": 4.9,
+    "createdAt": "2026-09-01T08:00:00.000Z",
+    "updatedAt": "2026-09-10T13:37:52.304Z",
+    "id": "farmer_ravi",
+    "acreage": 18.5
+  }
+]

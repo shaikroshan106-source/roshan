@@ -1,0 +1,132 @@
+[
+  {
+    "id": "REP_FARMER_1789047491677",
+    "reportType": "Quality Report",
+    "authorId": "farmer_ravi",
+    "authorRole": "farmer",
+    "authorName": "Ravi Kumar",
+    "title": "Moisture and Quality Certification Dispute",
+    "region": "Kurnool, Andhra Pradesh",
+    "crop": "General Produce",
+    "data": {
+      "description": "Requesting verified soil and moisture certificate for batch #98",
+      "category": "Quality",
+      "priority": "high"
+    },
+    "published": true,
+    "createdAt": "2026-09-10T13:38:11.677Z",
+    "updatedAt": "2026-09-10T13:38:11.677Z"
+  },
+  {
+    "id": "REP_BUYER_1789047450074",
+    "reportType": "Buyer Quality Inspection Report",
+    "authorId": "buyer_srinivas",
+    "authorRole": "buyer",
+    "authorName": "Srinivas M.",
+    "title": "Moisture Sample Testing on Guntur Batch",
+    "region": "Guntur, Andhra Pradesh",
+    "crop": "Chilli",
+    "data": {
+      "description": "Requesting recalibration of weighbridge reading for lot shipment #912",
+      "category": "Quality Discrepancy",
+      "priority": "normal"
+    },
+    "published": true,
+    "createdAt": "2026-09-10T13:37:30.074Z",
+    "updatedAt": "2026-09-10T13:37:30.074Z"
+  },
+  {
+    "id": "REP_BUYER_1789043114355",
+    "reportType": "Buyer Quality Inspection Report",
+    "authorId": "demo_buyer_1",
+    "authorRole": "buyer",
+    "authorName": "Srinivas M.",
+    "title": "Moisture Sample Testing on Guntur Batch",
+    "region": "Guntur, Andhra Pradesh",
+    "crop": "Chilli",
+    "data": {
+      "description": "Requesting recalibration of weighbridge reading for lot shipment #912",
+      "category": "Quality Discrepancy",
+      "priority": "normal"
+    },
+    "published": true,
+    "createdAt": "2026-09-10T12:25:14.355Z",
+    "updatedAt": "2026-09-10T12:25:14.355Z"
+  },
+  {
+    "id": "REP_BUYER_1789043103076",
+    "reportType": "Buyer Quality Inspection Report",
+    "authorId": "demo_buyer_1",
+    "authorRole": "buyer",
+    "authorName": "Srinivas M.",
+    "title": "Moisture Sample Testing on Guntur Batch",
+    "region": "Guntur, Andhra Pradesh",
+    "crop": "Chilli",
+    "data": {
+      "description": "Requesting recalibration of weighbridge reading for lot shipment #912",
+      "category": "Quality Discrepancy",
+      "priority": "normal"
+    },
+    "published": true,
+    "createdAt": "2026-09-10T12:25:03.076Z",
+    "updatedAt": "2026-09-10T12:25:03.076Z"
+  },
+  {
+    "id": "REP_FARMER_1789042594077",
+    "reportType": "Quality Report",
+    "authorId": "demo_farmer_1",
+    "authorRole": "farmer",
+    "authorName": "Ravi Kumar",
+    "title": "Moisture and Quality Certification Dispute",
+    "region": "Vizag",
+    "crop": "General Produce",
+    "data": {
+      "description": "Requesting verified soil and moisture certificate for batch #98",
+      "category": "Quality",
+      "priority": "high"
+    },
+    "published": true,
+    "createdAt": "2026-09-10T12:16:34.077Z",
+    "updatedAt": "2026-09-10T12:16:34.077Z"
+  },
+  {
+    "id": "REP_BUYER_1725610002",
+    "reportType": "buyer_procurement_summary",
+    "authorId": "buyer_srinivas",
+    "authorRole": "buyer",
+    "title": "Monthly Procurement Demand Bulletin - Guntur Mandi",
+    "region": "Guntur",
+    "crop": "Chilli",
+    "data": {
+      "targetProcurementTons": 120,
+      "acceptedGrades": [
+        "A+",
+        "A"
+      ],
+      "offeredPriceRange": "₹62 - ₹68 / kg",
+      "escrowReleaseSLA": "Within 2 hours of weighbridge receipt"
+    },
+    "published": true,
+    "createdAt": "2026-09-07T11:00:00.000Z",
+    "updatedAt": "2026-09-10T11:56:58.778Z"
+  },
+  {
+    "id": "REP_FARMER_1725610001",
+    "reportType": "farmer_harvest_forecast",
+    "authorId": "farmer_ravi",
+    "authorRole": "farmer",
+    "title": "Kharif Harvest Yield & Quality Forecast - Visakhapatnam",
+    "region": "Vizag",
+    "crop": "Tomato",
+    "data": {
+      "cultivatedAcreage": 6,
+      "projectedYieldKg": 18000,
+      "expectedHarvestDate": "2026-09-25",
+      "aiQualityGrade": "A",
+      "estimatedRevenue": 540000
+    },
+    "published": true,
+    "createdAt": "2026-09-08T09:00:00.000Z",
+    "updatedAt": "2026-09-10T11:56:58.777Z"
+  }
+]

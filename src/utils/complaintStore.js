@@ -2,9 +2,11 @@
  * complaintStore.js
  * 
  * Manages dispute and incident reports filed by Farmers and Buyers.
- * Persists to localStorage and syncs with the Admin Complaint Desk.
- * Supports Admin suspension of reported parties directly from the Complaint Box.
+ * Persists to localStorage, syncs with backend Express/Firestore,
+ * and updates the Admin Complaint Desk.
  */
+
+import { api } from '../services/api';
 
 const STORAGE_KEY = 'agridirect_complaints';
 const SUSPENDED_USERS_KEY = 'agridirect_suspended_users';
@@ -60,6 +62,28 @@ const SEED_COMPLAINTS = [
   },
 ];
 
+// Background sync on load
+syncComplaintsFromBackend();
+
+async function syncComplaintsFromBackend() {
+  if (typeof window === 'undefined') return;
+  try {
+    const res = await api.get('/complaints');
+    if (res.ok && res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(res.data.data));
+      window.dispatchEvent(new Event('agridirect_complaints_updated'));
+    }
+
+    const suspRes = await api.get('/complaints/suspended-users');
+    if (suspRes.ok && suspRes.data?.success && Array.isArray(suspRes.data.list)) {
+      localStorage.setItem(SUSPENDED_USERS_KEY, JSON.stringify(suspRes.data.list));
+      window.dispatchEvent(new Event('agridirect_user_suspended'));
+    }
+  } catch (e) {
+    console.warn('Backend complaints sync note:', e);
+  }
+}
+
 export function getComplaints() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -92,6 +116,12 @@ export function submitComplaint(complaintData) {
 
     const updated = [newComplaint, ...existing];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+    // Post to backend API
+    api.post('/complaints', complaintData).then(res => {
+      if (res.ok) syncComplaintsFromBackend();
+    }).catch(() => {});
+
     window.dispatchEvent(new Event('agridirect_complaints_updated'));
     return { success: true, complaint: newComplaint };
   } catch (err) {
@@ -119,6 +149,12 @@ export function updateComplaintStatus(id, newStatus, adminNote = '') {
     });
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+    // Patch to backend
+    api.patch(`/complaints/${id}/status`, { status: newStatus, adminNote }).then(() => {
+      syncComplaintsFromBackend();
+    }).catch(() => {});
+
     window.dispatchEvent(new Event('agridirect_complaints_updated'));
     return { success: true, updated };
   } catch (err) {
@@ -181,6 +217,11 @@ export function toggleSuspendReportedUser(complaintId, counterpartyName, reason 
         return item;
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedComplaints));
+    }
+
+    // Call backend API suspension endpoint
+    if (complaintId) {
+      api.post(`/complaints/${complaintId}/suspend-counterparty`, { counterpartyName: cleanName, reason }).catch(() => {});
     }
 
     window.dispatchEvent(new CustomEvent('agridirect_user_suspended', { detail: { counterpartyName: cleanName, isNowSuspended } }));

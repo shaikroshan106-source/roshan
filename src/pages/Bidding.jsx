@@ -8,6 +8,9 @@ import {
   publishBiddingLot,
   placeBidOnLot,
   acceptBidForLot,
+  rejectBidForLot,
+  editBidOnLot,
+  cancelBidOnLot,
 } from '../utils/biddingStore';
 import { resolveProduceImage } from '../utils/produceImageResolver';
 import biddingHeroImg from '../assets/bidding-hero.jpg';
@@ -137,6 +140,11 @@ export default function Bidding() {
   const [acceptDialogBid, setAcceptDialogBid] = useState(null);
   const [actionNotice, setActionNotice] = useState('');
 
+  // Buyer edit bid dialog state
+  const [editBidModalOpen, setEditBidModalOpen] = useState(false);
+  const [editingBid, setEditingBid] = useState(null);
+  const [editBidAmount, setEditBidAmount] = useState('');
+
   // Sync state on load and on custom events
   function refreshBiddingData() {
     const updatedLots = getBiddingLots();
@@ -166,6 +174,9 @@ export default function Bidding() {
     }
   }, [locationHook.search, lots]);
 
+  // AI Bid Recommendation state
+  const [aiBidRecommendation, setAiBidRecommendation] = useState(null);
+
   // Update lot bids when active lot changes
   useEffect(() => {
     const bids = getBidsForLot(activeLotId);
@@ -174,6 +185,19 @@ export default function Bidding() {
     const highest = bids.length > 0 ? Math.max(...bids.map(b => b.amount)) : (lot?.basePrice || 25);
     setBidAmount(String(+(highest + 1).toFixed(1)));
     setPlacedMsg('');
+
+    // Fetch AI Bid & Fair Market Recommendation
+    if (lot) {
+      fetch('/api/ai/recommend-bid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lot, currentBids: bids })
+      }).then(r => r.json()).then(res => {
+        if (res.success && res.data) {
+          setAiBidRecommendation(res.data);
+        }
+      }).catch(() => {});
+    }
   }, [activeLotId, lots]);
 
   // ── Role Ownership Helpers ────────────────────────────────────────────────
@@ -297,6 +321,57 @@ export default function Bidding() {
       refreshBiddingData();
     } else {
       alert(res.message || 'Could not accept bid.');
+    }
+  };
+
+  // ── FARMER: Handle Reject Bid ─────────────────────────────────────────────
+  const handleRejectBid = (bid) => {
+    if (window.confirm(`Decline offer of ₹${bid.amount}/kg from ${bid.buyer}? The buyer will be notified.`)) {
+      const res = rejectBidForLot(activeLotId, bid.id);
+      if (res.success) {
+        setActionNotice(res.message);
+        refreshBiddingData();
+        setTimeout(() => setActionNotice(''), 4500);
+      } else {
+        alert(res.message || 'Could not reject bid.');
+      }
+    }
+  };
+
+  // ── BUYER: Handle Open Edit Bid Modal ──────────────────────────────────────
+  const handleOpenEditBid = (bid) => {
+    setEditingBid(bid);
+    setEditBidAmount(String(bid.amount));
+    setEditBidModalOpen(true);
+  };
+
+  // ── BUYER: Handle Confirm Edit Bid ─────────────────────────────────────────
+  const handleConfirmEditBid = (e) => {
+    e.preventDefault();
+    if (!editingBid) return;
+    const res = editBidOnLot(activeLotId, editingBid.id, editBidAmount);
+    if (res.success) {
+      setActionNotice(res.message);
+      setEditBidModalOpen(false);
+      setEditingBid(null);
+      refreshBiddingData();
+      setTimeout(() => setActionNotice(''), 5000);
+    } else {
+      alert(res.message || 'Could not update bid.');
+    }
+  };
+
+  // ── BUYER: Handle Cancel / Withdraw Bid ───────────────────────────────────
+  const handleCancelBid = (bid) => {
+    if (window.confirm(`Withdraw your offer of ₹${bid.amount}/kg? The farmer will be notified.`)) {
+      const res = cancelBidOnLot(activeLotId, bid.id);
+      if (res.success) {
+        setActionNotice(res.message);
+        refreshBiddingData();
+        setTimeout(() => setActionNotice(''), 4500);
+      } else {
+        alert(res.message || 'Could not cancel bid.');
+      }
     }
   };
 
@@ -882,8 +957,8 @@ export default function Bidding() {
                           />
                         </div>
 
-                        {/* Quick increment chips */}
-                        <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem' }}>
+                        {/* Quick increment chips & AI Recommendation */}
+                        <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem', flexWrap: 'wrap', alignItems: 'center' }}>
                           {[1, 2, 5].map(inc => (
                             <button
                               key={inc}
@@ -898,6 +973,21 @@ export default function Bidding() {
                               +₹{inc}/kg
                             </button>
                           ))}
+                          {aiBidRecommendation?.buyerRecommendation?.suggestedBidAmount && (
+                            <button
+                              type="button"
+                              onClick={() => setBidAmount(String(aiBidRecommendation.buyerRecommendation.suggestedBidAmount))}
+                              style={{
+                                background: 'rgba(0,229,199,0.1)', border: '1px solid #00E5C7',
+                                borderRadius: 6, padding: '2px 8px', fontSize: '0.72rem',
+                                fontWeight: 700, cursor: 'pointer', color: '#052E2B',
+                                display: 'flex', alignItems: 'center', gap: '3px'
+                              }}
+                              title={aiBidRecommendation.buyerRecommendation.guidance}
+                            >
+                              <span>🤖 AI Suggested: ₹{aiBidRecommendation.buyerRecommendation.suggestedBidAmount}/kg</span>
+                            </button>
+                          )}
                         </div>
                       </div>
 
@@ -1091,24 +1181,80 @@ export default function Bidding() {
                               )}
                             </div>
 
-                            {/* FARMER ACCEPT BID ACTION */}
+                            {/* FARMER ACCEPT & DECLINE BID ACTIONS */}
                             {isFarmer && !isLotAccepted && (
-                              <button
-                                id={`accept-bid-btn-${bid.id}`}
-                                onClick={() => setAcceptDialogBid(bid)}
-                                style={{
-                                  background: '#10B981', color: '#FFFFFF',
-                                  border: 'none', borderRadius: 8,
-                                  padding: '0.45rem 0.85rem', fontSize: '0.8rem',
-                                  fontWeight: 700, cursor: 'pointer',
-                                  display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-                                  boxShadow: '0 2px 6px rgba(16,185,129,0.3)',
-                                  transition: 'all 0.15s ease',
-                                }}
-                              >
-                                <span>✅</span>
-                                <span>Accept Bid</span>
-                              </button>
+                              <div style={{ display: 'flex', gap: '0.4rem' }}>
+                                <button
+                                  id={`accept-bid-btn-${bid.id}`}
+                                  onClick={() => setAcceptDialogBid(bid)}
+                                  style={{
+                                    background: '#10B981', color: '#FFFFFF',
+                                    border: 'none', borderRadius: 8,
+                                    padding: '0.45rem 0.8rem', fontSize: '0.8rem',
+                                    fontWeight: 700, cursor: 'pointer',
+                                    display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                                    boxShadow: '0 2px 6px rgba(16,185,129,0.3)',
+                                    transition: 'all 0.15s ease',
+                                  }}
+                                >
+                                  <span>✅</span>
+                                  <span>Accept</span>
+                                </button>
+                                <button
+                                  id={`reject-bid-btn-${bid.id}`}
+                                  onClick={() => handleRejectBid(bid)}
+                                  style={{
+                                    background: '#FEF2F2', color: '#DC2626',
+                                    border: '1px solid #F87171', borderRadius: 8,
+                                    padding: '0.45rem 0.7rem', fontSize: '0.8rem',
+                                    fontWeight: 700, cursor: 'pointer',
+                                    display: 'inline-flex', alignItems: 'center', gap: '0.25rem',
+                                    transition: 'all 0.15s ease',
+                                  }}
+                                  title="Decline this buyer offer"
+                                >
+                                  <span>✕</span>
+                                  <span>Decline</span>
+                                </button>
+                              </div>
+                            )}
+
+                            {/* BUYER ACTIONS ON OWN ACTIVE BIDS */}
+                            {isBuyer && isBidOwnedByBuyer(bid) && !isLotAccepted && bid.status !== 'accepted' && bid.status !== 'rejected' && bid.status !== 'cancelled' && (
+                              <div style={{ display: 'flex', gap: '0.4rem' }}>
+                                <button
+                                  id={`edit-bid-btn-${bid.id}`}
+                                  onClick={() => handleOpenEditBid(bid)}
+                                  style={{
+                                    background: '#F0FDF4', color: '#166534',
+                                    border: '1px solid #BBF7D0', borderRadius: 8,
+                                    padding: '0.45rem 0.75rem', fontSize: '0.78rem',
+                                    fontWeight: 700, cursor: 'pointer',
+                                    display: 'inline-flex', alignItems: 'center', gap: '0.25rem',
+                                    transition: 'all 0.15s ease',
+                                  }}
+                                  title="Revise your bid amount"
+                                >
+                                  <span>✏️</span>
+                                  <span>Edit</span>
+                                </button>
+                                <button
+                                  id={`cancel-bid-btn-${bid.id}`}
+                                  onClick={() => handleCancelBid(bid)}
+                                  style={{
+                                    background: '#FEF2F2', color: '#DC2626',
+                                    border: '1px solid #FECACA', borderRadius: 8,
+                                    padding: '0.45rem 0.65rem', fontSize: '0.78rem',
+                                    fontWeight: 700, cursor: 'pointer',
+                                    display: 'inline-flex', alignItems: 'center', gap: '0.25rem',
+                                    transition: 'all 0.15s ease',
+                                  }}
+                                  title="Withdraw this offer"
+                                >
+                                  <span>✕</span>
+                                  <span>Withdraw</span>
+                                </button>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -1187,6 +1333,97 @@ export default function Bidding() {
                 ✅ Yes, Accept Deal
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── BUYER EDIT BID MODAL ─────────────────────────────────────────── */}
+      {editBidModalOpen && editingBid && (
+        <div
+          id="edit-bid-modal-backdrop"
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1350,
+            background: 'rgba(5, 46, 43, 0.75)', backdropFilter: 'blur(6px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+          }}
+          onClick={e => { if (e.target.id === 'edit-bid-modal-backdrop') setEditBidModalOpen(false); }}
+        >
+          <div style={{
+            background: '#FFFFFF', borderRadius: 16,
+            maxWidth: 440, width: '100%',
+            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)',
+            padding: '2rem', position: 'relative',
+          }}>
+            <button
+              onClick={() => setEditBidModalOpen(false)}
+              style={{
+                position: 'absolute', top: '1.25rem', right: '1.25rem',
+                background: '#F3F4F6', border: 'none', borderRadius: '50%',
+                width: 32, height: 32, cursor: 'pointer',
+              }}
+            >✕</button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>✏️</span>
+              <h3 style={{ margin: 0, color: '#052E2B', fontSize: '1.3rem' }}>Revise Your Offer</h3>
+            </div>
+            <p style={{ color: '#6B7280', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+              Update your offer per kg for <strong>{activeLot.crop}</strong> ({activeLot.quantity} kg).
+            </p>
+
+            <form onSubmit={handleConfirmEditBid} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#374151', marginBottom: 4 }}>
+                  New Bid Amount (₹/kg)
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <span style={{
+                    position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)',
+                    fontWeight: 700, color: 'var(--color-text-muted)',
+                  }}>₹</span>
+                  <input
+                    id="edit-bid-amount-input"
+                    type="number"
+                    step="0.5"
+                    min="1"
+                    required
+                    value={editBidAmount}
+                    onChange={e => setEditBidAmount(e.target.value)}
+                    className="input"
+                    style={{ width: '100%', paddingLeft: '1.85rem', fontWeight: 700, fontSize: '1.1rem' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{
+                background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 8,
+                padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              }}>
+                <span style={{ fontSize: '0.8rem', color: '#166534' }}>Revised Total Value</span>
+                <span style={{ fontWeight: 800, color: '#065F46', fontSize: '1.1rem' }}>
+                  ₹{((Number(editBidAmount) || 0) * activeLot.quantity).toLocaleString('en-IN')}
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.25rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setEditBidModalOpen(false)}
+                  className="btn btn-secondary"
+                  style={{ flex: 1, justifyContent: 'center' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  id="confirm-edit-bid-btn"
+                  type="submit"
+                  className="btn btn-gold"
+                  style={{ flex: 1.5, justifyContent: 'center', fontWeight: 700 }}
+                >
+                  💾 Save Revised Offer
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

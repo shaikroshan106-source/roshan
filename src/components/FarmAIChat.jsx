@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { chatAI } from '../data/mockAI';
 
+import { api } from '../services/api';
+
 const INITIAL_MESSAGES = [
   {
     id: 1,
@@ -42,7 +44,7 @@ export default function FarmAIChat() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, typing]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const text = input.trim();
     if (!text) return;
 
@@ -51,18 +53,31 @@ export default function FarmAIChat() {
     setInput('');
     setTyping(true);
 
-    // Simulate AI thinking delay (1.2–2.5s)
-    const delay = 1200 + Math.random() * 1300;
-    setTimeout(() => {
-      const reply = chatAI(text);
+    try {
+      // Call real backend AI endpoint
+      const res = await api.post('/ai/chat', { message: text, lang: 'en', role: 'farmer' });
+      let replyText = res.ok && res.data?.reply ? res.data.reply : null;
+
+      if (!replyText) {
+        replyText = chatAI(text);
+      }
+
       setTyping(false);
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
         role: 'ai',
-        text: reply,
+        text: replyText,
         time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
       }]);
-    }, delay);
+    } catch (err) {
+      setTyping(false);
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        role: 'ai',
+        text: chatAI(text),
+        time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+      }]);
+    }
   };
 
   const quickPrompts = ['price', 'buyer', 'transport', 'when to sell', 'profit'];

@@ -1,0 +1,611 @@
+[
+  {
+    "id": "NOTIF_1789049749235",
+    "userId": "buyer_srinivas",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Rice!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹3000/kg for 55 kg of Rice. Order ORD_2026_854873 created.",
+    "metadata": {
+      "lotId": "LOT_1789047467728",
+      "bidId": "BID_1789047476364",
+      "orderId": "ORD_2026_854873",
+      "totalValue": 168450
+    },
+    "read": false,
+    "createdAt": "2026-09-10T14:15:49.235Z",
+    "updatedAt": "2026-09-10T14:15:49.235Z"
+  },
+  {
+    "id": "NOTIF_1789049556188",
+    "userId": "buyer_andhra",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Tomato!",
+    "message": "Farmer undefined accepted your offer of ₹29/kg for 500 kg of Tomato. Order ORD_2026_978586 created.",
+    "metadata": {
+      "lotId": "L001",
+      "bidId": "BID_003",
+      "orderId": "ORD_2026_978586",
+      "totalValue": 16445
+    },
+    "read": false,
+    "createdAt": "2026-09-10T14:12:36.188Z",
+    "updatedAt": "2026-09-10T14:12:36.188Z"
+  },
+  {
+    "id": "NOTIF_RESTORE_1789048191513",
+    "userId": "user_buyer_1789048169488",
+    "type": "ACCOUNT_RESTORED",
+    "title": "Account Restored",
+    "message": "Your AgriDirect platform privileges have been restored by Admin.",
+    "read": false,
+    "createdAt": "2026-09-10T13:49:51.513Z",
+    "updatedAt": "2026-09-10T13:49:51.513Z"
+  },
+  {
+    "id": "NOTIF_SUSPEND_1789048188973",
+    "userId": "user_buyer_1789048169488",
+    "type": "ACCOUNT_SUSPENDED",
+    "title": "Account Suspended",
+    "message": "Your account access has been suspended by AgriDirect Admin. Reason: Policy Violation - Unresponsive to contract commitments",
+    "read": false,
+    "createdAt": "2026-09-10T13:49:48.973Z",
+    "updatedAt": "2026-09-10T13:49:48.973Z"
+  },
+  {
+    "id": "NOTIF_1789048178255",
+    "userId": "user_buyer_1789048169488",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Anakapalli Organic Jaggery!",
+    "message": "Farmer Anand Reddy accepted your offer of ₹58/kg for 1200 kg of Anakapalli Organic Jaggery. Order ORD_2026_346816 created.",
+    "metadata": {
+      "lotId": "LOT_1789048166921",
+      "bidId": "BID_1789048172111",
+      "orderId": "ORD_2026_346816",
+      "totalValue": 72096
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:49:38.256Z",
+    "updatedAt": "2026-09-10T13:49:38.256Z"
+  },
+  {
+    "id": "NOTIF_1789048173136",
+    "userId": "user_farmer_1789048161947",
+    "type": "NEW_BID",
+    "title": "New Offer on Anakapalli Organic Jaggery",
+    "message": "Heritage Foods Procurement placed an offer of ₹58/kg on your Anakapalli Organic Jaggery lot.",
+    "metadata": {
+      "lotId": "LOT_1789048166921",
+      "bidId": "BID_1789048172111",
+      "amount": 58
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:49:33.136Z",
+    "updatedAt": "2026-09-10T13:49:33.136Z"
+  },
+  {
+    "id": "NOTIF_1789047490141",
+    "userId": "buyer_srinivas",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Rice!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹3100/kg for 55 kg of Rice. Order ORD_2026_816243 created.",
+    "metadata": {
+      "lotId": "LOT_1789047467728",
+      "bidId": "BID_1789047478920",
+      "orderId": "ORD_2026_816243",
+      "totalValue": 174005
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:38:10.141Z",
+    "updatedAt": "2026-09-10T13:38:10.141Z"
+  },
+  {
+    "id": "NOTIF_1789047486045",
+    "userId": "buyer_srinivas",
+    "type": "BID_REJECTED",
+    "title": "Offer Declined on Rice",
+    "message": "Farmer Ravi Kumar declined your offer of ₹3000/kg for Rice. You can place a revised offer.",
+    "metadata": {
+      "lotId": "LOT_1789047467728",
+      "bidId": "BID_1789047476364",
+      "amount": 3000
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:38:06.045Z",
+    "updatedAt": "2026-09-10T13:38:06.045Z"
+  },
+  {
+    "id": "NOTIF_1789047480448",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on Rice",
+    "message": "Srinivas M. placed an offer of ₹3100/kg on your Rice lot.",
+    "metadata": {
+      "lotId": "LOT_1789047467728",
+      "bidId": "BID_1789047478920",
+      "amount": 3100
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:38:00.448Z",
+    "updatedAt": "2026-09-10T13:38:00.448Z"
+  },
+  {
+    "id": "NOTIF_1789047477390",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on Rice",
+    "message": "Srinivas M. placed an offer of ₹3000/kg on your Rice lot.",
+    "metadata": {
+      "lotId": "LOT_1789047467728",
+      "bidId": "BID_1789047476364",
+      "amount": 3000
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:37:57.390Z",
+    "updatedAt": "2026-09-10T13:37:57.390Z"
+  },
+  {
+    "id": "NOTIF_1789047447012",
+    "userId": "buyer_srinivas",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Chilli!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹189/kg for 500 kg of Chilli. Order ORD_2026_706754 created.",
+    "metadata": {
+      "lotId": "LOT_1789047424570",
+      "bidId": "BID_1789047429649",
+      "orderId": "ORD_2026_706754",
+      "totalValue": 97245
+    },
+    "read": true,
+    "createdAt": "2026-09-10T13:37:27.012Z",
+    "updatedAt": "2026-09-10T13:37:32.614Z"
+  },
+  {
+    "id": "NOTIF_1789047441376",
+    "userId": "farmer_ravi",
+    "type": "BID_CANCELLED",
+    "title": "Bid Withdrawn on Chilli",
+    "message": "Buyer Priya Spices & Foods Ltd withdrew their offer of ₹191/kg for Chilli.",
+    "metadata": {
+      "lotId": "LOT_1789047424570",
+      "bidId": "BID_1789047435762"
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:37:21.376Z",
+    "updatedAt": "2026-09-10T13:37:21.376Z"
+  },
+  {
+    "id": "NOTIF_1789047437295",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on Chilli",
+    "message": "Priya Spices & Foods Ltd placed an offer of ₹191/kg on your Chilli lot.",
+    "metadata": {
+      "lotId": "LOT_1789047424570",
+      "bidId": "BID_1789047435762",
+      "amount": 191
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:37:17.295Z",
+    "updatedAt": "2026-09-10T13:37:17.295Z"
+  },
+  {
+    "id": "NOTIF_1789047434237",
+    "userId": "farmer_ravi",
+    "type": "BID_REVISED",
+    "title": "Offer Revised on Chilli",
+    "message": "Buyer Priya Spices & Foods Ltd updated their offer on Chilli to ₹189/kg.",
+    "metadata": {
+      "lotId": "LOT_1789047424570",
+      "bidId": "BID_1789047429649",
+      "newAmount": 189
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:37:14.237Z",
+    "updatedAt": "2026-09-10T13:37:14.237Z"
+  },
+  {
+    "id": "NOTIF_1789047430667",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on Chilli",
+    "message": "Priya Spices & Foods Ltd placed an offer of ₹185/kg on your Chilli lot.",
+    "metadata": {
+      "lotId": "LOT_1789047424570",
+      "bidId": "BID_1789047429649",
+      "amount": 185
+    },
+    "read": false,
+    "createdAt": "2026-09-10T13:37:10.667Z",
+    "updatedAt": "2026-09-10T13:37:10.668Z"
+  },
+  {
+    "id": "NOTIF_ADMIN_1789047410648",
+    "userId": "all",
+    "type": "ADMIN_ANNOUNCEMENT",
+    "title": "Mandi Quality Inspection Update",
+    "message": "Notice: All AP mandis now require AI moisture verification certificates.",
+    "priority": "high",
+    "read": false,
+    "createdAt": "2026-09-10T13:36:50.648Z",
+    "updatedAt": "2026-09-10T13:36:50.648Z"
+  },
+  {
+    "id": "NOTIF_MOD_1789047407594",
+    "userId": "farmer_ravi",
+    "type": "LOT_REMOVED",
+    "title": "Listing Removed: Rice",
+    "message": "Your produce lot \"Rice\" has been removed by Admin. Reason: Violates platform crop quality grading guidelines",
+    "read": false,
+    "createdAt": "2026-09-10T13:36:47.594Z",
+    "updatedAt": "2026-09-10T13:36:47.594Z"
+  },
+  {
+    "id": "NOTIF_RESTORE_1789047400962",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_RESTORED",
+    "title": "Account Restored",
+    "message": "Your AgriDirect platform privileges have been restored by Admin.",
+    "read": false,
+    "createdAt": "2026-09-10T13:36:40.962Z",
+    "updatedAt": "2026-09-10T13:36:40.962Z"
+  },
+  {
+    "id": "NOTIF_SUSPEND_1789047398917",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_SUSPENDED",
+    "title": "Account Suspended",
+    "message": "Your account access has been suspended by AgriDirect Admin. Reason: Repeated non-payment violation flagged in Arbitration Ticket #9101",
+    "read": false,
+    "createdAt": "2026-09-10T13:36:38.917Z",
+    "updatedAt": "2026-09-10T13:36:38.917Z"
+  },
+  {
+    "id": "NOTIF_ADMIN_1789044774452",
+    "userId": "all",
+    "type": "ADMIN_ANNOUNCEMENT",
+    "title": "Mandi Quality Inspection Update",
+    "message": "Notice: All AP mandis now require AI moisture verification certificates.",
+    "priority": "high",
+    "read": false,
+    "createdAt": "2026-09-10T12:52:54.452Z",
+    "updatedAt": "2026-09-10T12:52:54.452Z"
+  },
+  {
+    "id": "NOTIF_MOD_1789044771385",
+    "userId": "farmer_ravi",
+    "type": "LOT_REMOVED",
+    "title": "Listing Removed: Rice",
+    "message": "Your produce lot \"Rice\" has been removed by Admin. Reason: Violates platform crop quality grading guidelines",
+    "read": false,
+    "createdAt": "2026-09-10T12:52:51.385Z",
+    "updatedAt": "2026-09-10T12:52:51.385Z"
+  },
+  {
+    "id": "NOTIF_RESTORE_1789044764749",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_RESTORED",
+    "title": "Account Restored",
+    "message": "Your AgriDirect platform privileges have been restored by Admin.",
+    "read": false,
+    "createdAt": "2026-09-10T12:52:44.749Z",
+    "updatedAt": "2026-09-10T12:52:44.749Z"
+  },
+  {
+    "id": "NOTIF_SUSPEND_1789044762711",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_SUSPENDED",
+    "title": "Account Suspended",
+    "message": "Your account access has been suspended by AgriDirect Admin. Reason: Repeated non-payment violation flagged in Arbitration Ticket #9101",
+    "read": false,
+    "createdAt": "2026-09-10T12:52:42.711Z",
+    "updatedAt": "2026-09-10T12:52:42.711Z"
+  },
+  {
+    "id": "NOTIF_ADMIN_1789043403948",
+    "userId": "all",
+    "type": "ADMIN_ANNOUNCEMENT",
+    "title": "Mandi Quality Inspection Update",
+    "message": "Notice: All AP mandis now require AI moisture verification certificates.",
+    "priority": "high",
+    "read": false,
+    "createdAt": "2026-09-10T12:30:03.948Z",
+    "updatedAt": "2026-09-10T12:30:03.948Z"
+  },
+  {
+    "id": "NOTIF_MOD_1789043403933",
+    "userId": "farmer_ravi",
+    "type": "LOT_REMOVED",
+    "title": "Listing Removed: Rice",
+    "message": "Your produce lot \"Rice\" has been removed by Admin. Reason: Violates platform crop quality grading guidelines",
+    "read": false,
+    "createdAt": "2026-09-10T12:30:03.933Z",
+    "updatedAt": "2026-09-10T12:30:03.933Z"
+  },
+  {
+    "id": "NOTIF_RESTORE_1789043403900",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_RESTORED",
+    "title": "Account Restored",
+    "message": "Your AgriDirect platform privileges have been restored by Admin.",
+    "read": false,
+    "createdAt": "2026-09-10T12:30:03.900Z",
+    "updatedAt": "2026-09-10T12:30:03.900Z"
+  },
+  {
+    "id": "NOTIF_SUSPEND_1789043403892",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_SUSPENDED",
+    "title": "Account Suspended",
+    "message": "Your account access has been suspended by AgriDirect Admin. Reason: Repeated non-payment violation flagged in Arbitration Ticket #9101",
+    "read": false,
+    "createdAt": "2026-09-10T12:30:03.892Z",
+    "updatedAt": "2026-09-10T12:30:03.892Z"
+  },
+  {
+    "id": "NOTIF_ADMIN_1789043343170",
+    "userId": "all",
+    "type": "ADMIN_ANNOUNCEMENT",
+    "title": "Mandi Quality Inspection Update",
+    "message": "Notice: All AP mandis now require AI moisture verification certificates.",
+    "priority": "high",
+    "read": false,
+    "createdAt": "2026-09-10T12:29:03.170Z",
+    "updatedAt": "2026-09-10T12:29:03.170Z"
+  },
+  {
+    "id": "NOTIF_MOD_1789043343153",
+    "userId": "demo_farmer_1",
+    "type": "LOT_REMOVED",
+    "title": "Listing Removed: Rice",
+    "message": "Your produce lot \"Rice\" has been removed by Admin. Reason: Violates platform crop quality grading guidelines",
+    "read": false,
+    "createdAt": "2026-09-10T12:29:03.153Z",
+    "updatedAt": "2026-09-10T12:29:03.153Z"
+  },
+  {
+    "id": "NOTIF_RESTORE_1789043343135",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_RESTORED",
+    "title": "Account Restored",
+    "message": "Your AgriDirect platform privileges have been restored by Admin.",
+    "read": false,
+    "createdAt": "2026-09-10T12:29:03.135Z",
+    "updatedAt": "2026-09-10T12:29:03.135Z"
+  },
+  {
+    "id": "NOTIF_1789043343130",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on Tomato",
+    "message": "Priya Spices placed an offer of ₹999/kg on your Tomato lot.",
+    "metadata": {
+      "lotId": "L001",
+      "bidId": "BID_1789043343112",
+      "amount": 999
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:29:03.130Z",
+    "updatedAt": "2026-09-10T12:29:03.130Z"
+  },
+  {
+    "id": "NOTIF_SUSPEND_1789043343108",
+    "userId": "buyer_srinivas",
+    "type": "ACCOUNT_SUSPENDED",
+    "title": "Account Suspended",
+    "message": "Your account access has been suspended by AgriDirect Admin. Reason: Repeated non-payment violation flagged in Arbitration Ticket #9101",
+    "read": false,
+    "createdAt": "2026-09-10T12:29:03.108Z",
+    "updatedAt": "2026-09-10T12:29:03.109Z"
+  },
+  {
+    "id": "NOTIF_1789043114345",
+    "userId": "demo_buyer_1",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Chilli!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹189/kg for 500 kg of Chilli. Order ORD_2026_367763 created.",
+    "metadata": {
+      "lotId": "LOT_1789043114276",
+      "bidId": "BID_1789043114304",
+      "orderId": "ORD_2026_367763",
+      "totalValue": 97245
+    },
+    "read": true,
+    "createdAt": "2026-09-10T12:25:14.345Z",
+    "updatedAt": "2026-09-10T12:25:14.359Z"
+  },
+  {
+    "id": "NOTIF_1789043114332",
+    "userId": "demo_farmer_1",
+    "type": "BID_CANCELLED",
+    "title": "Bid Withdrawn on Chilli",
+    "message": "Buyer Priya Spices & Foods Ltd withdrew their offer of ₹191/kg for Chilli.",
+    "metadata": {
+      "lotId": "LOT_1789043114276",
+      "bidId": "BID_1789043114318"
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:25:14.332Z",
+    "updatedAt": "2026-09-10T12:25:14.332Z"
+  },
+  {
+    "id": "NOTIF_1789043114323",
+    "userId": "demo_farmer_1",
+    "type": "NEW_BID",
+    "title": "New Offer on Chilli",
+    "message": "Priya Spices & Foods Ltd placed an offer of ₹191/kg on your Chilli lot.",
+    "metadata": {
+      "lotId": "LOT_1789043114276",
+      "bidId": "BID_1789043114318",
+      "amount": 191
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:25:14.323Z",
+    "updatedAt": "2026-09-10T12:25:14.323Z"
+  },
+  {
+    "id": "NOTIF_1789043114315",
+    "userId": "demo_farmer_1",
+    "type": "BID_REVISED",
+    "title": "Offer Revised on Chilli",
+    "message": "Buyer Priya Spices & Foods Ltd updated their offer on Chilli to ₹189/kg.",
+    "metadata": {
+      "lotId": "LOT_1789043114276",
+      "bidId": "BID_1789043114304",
+      "newAmount": 189
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:25:14.315Z",
+    "updatedAt": "2026-09-10T12:25:14.315Z"
+  },
+  {
+    "id": "NOTIF_1789043114308",
+    "userId": "demo_farmer_1",
+    "type": "NEW_BID",
+    "title": "New Offer on Chilli",
+    "message": "Priya Spices & Foods Ltd placed an offer of ₹185/kg on your Chilli lot.",
+    "metadata": {
+      "lotId": "LOT_1789043114276",
+      "bidId": "BID_1789043114304",
+      "amount": 185
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:25:14.308Z",
+    "updatedAt": "2026-09-10T12:25:14.308Z"
+  },
+  {
+    "id": "NOTIF_1789042594067",
+    "userId": "demo_buyer_1",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Rice!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹3100/kg for 55 kg of Rice. Order ORD_2026_366006 created.",
+    "metadata": {
+      "lotId": "LOT_1789042594004",
+      "bidId": "BID_1789042594045",
+      "orderId": "ORD_2026_366006",
+      "totalValue": 174005
+    },
+    "read": true,
+    "createdAt": "2026-09-10T12:16:34.067Z",
+    "updatedAt": "2026-09-10T12:25:03.082Z"
+  },
+  {
+    "id": "NOTIF_1789042594058",
+    "userId": "demo_buyer_1",
+    "type": "BID_REJECTED",
+    "title": "Offer Declined on Rice",
+    "message": "Farmer Ravi Kumar declined your offer of ₹3000/kg for Rice. You can place a revised offer.",
+    "metadata": {
+      "lotId": "LOT_1789042594004",
+      "bidId": "BID_1789042594039",
+      "amount": 3000
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:16:34.058Z",
+    "updatedAt": "2026-09-10T12:16:34.058Z"
+  },
+  {
+    "id": "NOTIF_1789042594049",
+    "userId": "demo_farmer_1",
+    "type": "NEW_BID",
+    "title": "New Offer on Rice",
+    "message": "Srinivas M. placed an offer of ₹3100/kg on your Rice lot.",
+    "metadata": {
+      "lotId": "LOT_1789042594004",
+      "bidId": "BID_1789042594045",
+      "amount": 3100
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:16:34.049Z",
+    "updatedAt": "2026-09-10T12:16:34.049Z"
+  },
+  {
+    "id": "NOTIF_1789042594042",
+    "userId": "demo_farmer_1",
+    "type": "NEW_BID",
+    "title": "New Offer on Rice",
+    "message": "Srinivas M. placed an offer of ₹3000/kg on your Rice lot.",
+    "metadata": {
+      "lotId": "LOT_1789042594004",
+      "bidId": "BID_1789042594039",
+      "amount": 3000
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:16:34.042Z",
+    "updatedAt": "2026-09-10T12:16:34.042Z"
+  },
+  {
+    "id": "NOTIF_1789042495968",
+    "userId": "demo_farmer_1",
+    "type": "NEW_BID",
+    "title": "New Offer on Rice",
+    "message": "Srinivas M. placed an offer of ₹3000/kg on your Rice lot.",
+    "metadata": {
+      "lotId": "LOT_1789042495920",
+      "bidId": "BID_1789042495964",
+      "amount": 3000
+    },
+    "read": false,
+    "createdAt": "2026-09-10T12:14:55.968Z",
+    "updatedAt": "2026-09-10T12:14:55.968Z"
+  },
+  {
+    "id": "NOTIF_1789041435151",
+    "userId": "demo_buyer_1",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Garlic!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹82/kg for 400 kg of Garlic. Order ORD_2026_426936 created. Proceed to Escrow deposit.",
+    "metadata": {
+      "lotId": "LOT_1789041435121",
+      "bidId": "BID_1789041435140",
+      "orderId": "ORD_2026_426936",
+      "totalValue": 34928
+    },
+    "read": false,
+    "createdAt": "2026-09-10T11:57:15.151Z",
+    "updatedAt": "2026-09-10T11:57:15.151Z"
+  },
+  {
+    "id": "NOTIF_1789041435142",
+    "userId": "demo_farmer_1",
+    "type": "NEW_BID",
+    "title": "New Offer on Garlic",
+    "message": "Srinivas Agro Exports placed an offer of ₹82/kg on your Garlic lot.",
+    "metadata": {
+      "lotId": "LOT_1789041435121",
+      "bidId": "BID_1789041435140",
+      "amount": 82
+    },
+    "read": false,
+    "createdAt": "2026-09-10T11:57:15.142Z",
+    "updatedAt": "2026-09-10T11:57:15.142Z"
+  },
+  {
+    "id": "NOTIF_002",
+    "userId": "buyer_srinivas",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Chilli!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹64/kg for 800kg Chilli. Order ORD_2026_1001 created.",
+    "metadata": {
+      "orderId": "ORD_2026_1001",
+      "lotId": "L003"
+    },
+    "read": false,
+    "createdAt": "2026-09-04T12:00:00.000Z",
+    "updatedAt": "2026-09-10T11:56:58.785Z"
+  },
+  {
+    "id": "NOTIF_001",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Bid on Tomato Lot",
+    "message": "Krishna Fresh Foods placed an offer of ₹29.0/kg on your 500kg Tomato lot.",
+    "metadata": {
+      "lotId": "L001",
+      "bidId": "BID_003",
+      "amount": 29
+    },
+    "read": false,
+    "createdAt": "2026-09-02T11:02:00.000Z",
+    "updatedAt": "2026-09-10T11:56:58.785Z"
+  }
+]

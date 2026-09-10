@@ -1,0 +1,134 @@
+[
+  {
+    "id": "Rice_Vijayawada_2026-09-10",
+    "crop": "Rice",
+    "mandi": "Vijayawada",
+    "date": "2026-09-10",
+    "minPrice": 31,
+    "maxPrice": 35,
+    "modalPrice": 33,
+    "trend": "stable",
+    "confidence": 89,
+    "weeklyForecast": [
+      {
+        "day": "Mon",
+        "price": 33
+      },
+      {
+        "day": "Tue",
+        "price": 33
+      },
+      {
+        "day": "Wed",
+        "price": 33.2
+      },
+      {
+        "day": "Thu",
+        "price": 33.5
+      },
+      {
+        "day": "Fri",
+        "price": 33.5
+      },
+      {
+        "day": "Sat",
+        "price": 34
+      },
+      {
+        "day": "Sun",
+        "price": 34
+      }
+    ],
+    "recommendation": "SELL NOW — stable prices with high procurement volume",
+    "updatedAt": "2026-09-10T11:56:58.784Z",
+    "createdAt": "2026-09-10T11:56:58.784Z"
+  },
+  {
+    "id": "Chilli_Guntur_2026-09-10",
+    "crop": "Chilli",
+    "mandi": "Guntur",
+    "date": "2026-09-10",
+    "minPrice": 58,
+    "maxPrice": 66,
+    "modalPrice": 64,
+    "trend": "rising",
+    "confidence": 96,
+    "weeklyForecast": [
+      {
+        "day": "Mon",
+        "price": 64
+      },
+      {
+        "day": "Tue",
+        "price": 65
+      },
+      {
+        "day": "Wed",
+        "price": 66.2
+      },
+      {
+        "day": "Thu",
+        "price": 67
+      },
+      {
+        "day": "Fri",
+        "price": 68.5
+      },
+      {
+        "day": "Sat",
+        "price": 69
+      },
+      {
+        "day": "Sun",
+        "price": 70
+      }
+    ],
+    "recommendation": "HOLD — export festival demand surging next week",
+    "updatedAt": "2026-09-10T11:56:58.783Z",
+    "createdAt": "2026-09-10T11:56:58.783Z"
+  },
+  {
+    "id": "Tomato_Vizag_2026-09-10",
+    "crop": "Tomato",
+    "mandi": "Vizag",
+    "date": "2026-09-10",
+    "minPrice": 26,
+    "maxPrice": 32,
+    "modalPrice": 29,
+    "trend": "rising",
+    "confidence": 94,
+    "weeklyForecast": [
+      {
+        "day": "Mon",
+        "price": 29
+      },
+      {
+        "day": "Tue",
+        "price": 29.5
+      },
+      {
+        "day": "Wed",
+        "price": 30.5
+      },
+      {
+        "day": "Thu",
+        "price": 31
+      },
+      {
+        "day": "Fri",
+        "price": 31.8
+      },
+      {
+        "day": "Sat",
+        "price": 32.5
+      },
+      {
+        "day": "Sun",
+        "price": 33
+      }
+    ],
+    "recommendation": "WAIT & SELL — price may rise ₹3–₹4/kg in 3–5 days",
+    "updatedAt": "2026-09-10T11:56:58.782Z",
+    "createdAt": "2026-09-10T11:56:58.783Z"
+  }
+]

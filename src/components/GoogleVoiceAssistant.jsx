@@ -268,7 +268,7 @@ export default function GoogleVoiceAssistant() {
       actionTriggered = () => navigate('/');
     }
     // Check subject domain responses
-    else if (query.includes('ధర') || query.includes('rate') || query.includes('price') || query.includes('भाव') || query.includes('రేటు') || query.includes('tomato') || query.includes('టమాటా') || query.includes('टमाटर') || query.includes('chilli') || query.includes('మిర్చి')) {
+    if (query.includes('ధర') || query.includes('rate') || query.includes('price') || query.includes('भाव') || query.includes('రేటు') || query.includes('tomato') || query.includes('టమాటా') || query.includes('टमाटर') || query.includes('chilli') || query.includes('మిర్చి')) {
       reply = langData.responses.price;
     } else if (query.includes('buyer') || query.includes('కొనుగోలు') || query.includes('खरीदार') || query.includes('व्यापारी')) {
       reply = langData.responses.buyer;
@@ -284,6 +284,17 @@ export default function GoogleVoiceAssistant() {
 
     setAssistantReply(reply);
     speakText(reply, currentLangKey);
+
+    // Also asynchronously fetch enhanced response from backend AI if network available
+    fetch('/api/ai/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userQuery, lang: currentLangKey.toLowerCase(), role: 'farmer' })
+    }).then(r => r.json()).then(res => {
+      if (res.success && res.reply && res.reply !== reply) {
+        setAssistantReply(res.reply);
+      }
+    }).catch(() => {});
 
     if (actionTriggered) {
       setTimeout(() => actionTriggered(), 1200);

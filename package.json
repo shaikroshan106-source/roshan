@@ -4,10 +4,16 @@
   "description": "FarmDirect AI — AI-powered agricultural trading platform",
   "scripts": {
     "dev": "vite",
+    "server": "node backend/src/server.js",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": ["agriculture", "ai", "farming", "marketplace"],
+  "keywords": [
+    "agriculture",
+    "ai",
+    "farming",
+    "marketplace"
+  ],
   "author": "FarmDirect AI Team",
   "license": "ISC",
   "type": "module",
@@ -17,6 +23,7 @@
   },
   "dependencies": {
     "chart.js": "^4.5.1",
+    "firebase": "^12.19.0",
     "gsap": "^3.15.0",
     "leaflet": "^1.9.4",
     "react": "^19.2.8",

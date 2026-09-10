@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { getStoredListings, saveNewListing, removeListing } from '../utils/marketplaceStore';
+import { getStoredListings, saveNewListing, updateProduceListing, removeCustomListing, removeListing } from '../utils/marketplaceStore';
 import { placeBidOnLot, getBiddingLots, getBidsForLot, removeFraudulentBid, removeFraudulentListing, publishBiddingLot } from '../utils/biddingStore';
 import { resolveProduceImage, PRESET_CROPS, getProduceMetadata } from '../utils/produceImageResolver';
 import ProduceImageScanner from '../components/ProduceImageScanner';
@@ -20,7 +20,7 @@ const cropColor = Object.fromEntries(PRESET_CROPS.map(c => [c.name, c.color]));
 
 const gradeOptions = ['All', 'A+', 'A', 'B+', 'B'];
 
-function CropCard({ lot, isFarmer, isBuyer, isAdmin, isYours, onBidClick, onViewLotClick, onAdminRemoveListing }) {
+function CropCard({ lot, isFarmer, isBuyer, isAdmin, isYours, onBidClick, onViewLotClick, onAdminRemoveListing, onEditClick, onDeleteClick }) {
   const [imageError, setImageError] = useState(false);
   const color = cropColor[lot.crop] || '#2E7D32';
   const emoji = cropEmoji[lot.crop] || '🌾';
@@ -148,17 +148,65 @@ function CropCard({ lot, isFarmer, isBuyer, isAdmin, isYours, onBidClick, onView
             <div className="progress-bar-fill progress-bar-fill--ai" style={{ width: `${lot.aiConfidence}%` }} />
           </div>
 
-          {/* Action buttons: Farmer only sees View Lot; Buyer sees View Lot + Bid */}
+          {/* Action buttons: Farmer sees View Lot + (Edit & Delete if owned); Buyer sees View Lot + Bid */}
           {isFarmer ? (
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
               <button
                 id={`view-lot-${lot.id}`}
                 onClick={() => onViewLotClick && onViewLotClick(lot)}
                 className="btn btn-primary"
-                style={{ width: '100%', justifyContent: 'center', padding: '0.55rem', fontSize: '0.88rem' }}
+                style={{ flex: isYours ? 1.4 : 1, justifyContent: 'center', padding: '0.55rem', fontSize: '0.85rem' }}
               >
-                View Lot Details
+                {isYours ? 'View Lot' : 'View Lot Details'}
               </button>
+              {isYours && (
+                <>
+                  <button
+                    id={`edit-lot-${lot.id}`}
+                    type="button"
+                    onClick={() => onEditClick && onEditClick(lot)}
+                    style={{
+                      padding: '0.45rem 0.75rem',
+                      background: '#ECFDF5',
+                      border: '1.5px solid #10B981',
+                      borderRadius: 8,
+                      color: '#065F46',
+                      fontWeight: 700,
+                      fontSize: '0.82rem',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      transition: 'all 0.15s ease',
+                    }}
+                    title="Edit price, quantity, location, or produce details"
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    id={`delete-lot-${lot.id}`}
+                    type="button"
+                    onClick={() => onDeleteClick && onDeleteClick(lot)}
+                    style={{
+                      padding: '0.45rem 0.65rem',
+                      background: '#FEF2F2',
+                      border: '1.5px solid #F87171',
+                      borderRadius: 8,
+                      color: '#DC2626',
+                      fontWeight: 700,
+                      fontSize: '0.82rem',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      transition: 'all 0.15s ease',
+                    }}
+                    title="Delete your produce listing"
+                  >
+                    🗑️
+                  </button>
+                </>
+              )}
             </div>
           ) : (
             <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -270,6 +318,75 @@ export default function Marketplace() {
   const [formMoisture, setFormMoisture] = useState('11');
   const [formImage, setFormImage] = useState('');
   const [formAiInspection, setFormAiInspection] = useState(null);
+
+  // Edit Produce Modal State (for Farmers)
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingLot, setEditingLot] = useState(null);
+  const [editCrop, setEditCrop] = useState('');
+  const [editQuantity, setEditQuantity] = useState('');
+  const [editPrice, setEditPrice] = useState('');
+  const [editLocation, setEditLocation] = useState('');
+  const [editGrade, setEditGrade] = useState('A');
+  const [editMoisture, setEditMoisture] = useState('12');
+  const [editDescription, setEditDescription] = useState('');
+  const [editImage, setEditImage] = useState('');
+
+  function handleOpenEditModal(lot) {
+    setEditingLot(lot);
+    setEditCrop(lot.crop || '');
+    setEditQuantity(String(lot.quantity || ''));
+    setEditPrice(String(lot.pricePerKg || lot.basePrice || ''));
+    setEditLocation(lot.location || user?.location || 'Vizag');
+    setEditGrade(lot.grade || 'A');
+    setEditMoisture(String(lot.moisture || '12'));
+    setEditDescription(lot.description || '');
+    setEditImage(lot.imageUrl || '');
+    setEditModalOpen(true);
+  }
+
+  function handleSaveEditProduce(e) {
+    e.preventDefault();
+    if (!editingLot) return;
+
+    const numQty = Number(editQuantity);
+    const numPrice = Number(editPrice);
+
+    if (!numQty || numQty <= 0) {
+      alert('Please enter a valid quantity.');
+      return;
+    }
+    if (!numPrice || numPrice <= 0) {
+      alert('Please enter a valid price per kg.');
+      return;
+    }
+
+    const updated = updateProduceListing(editingLot.id, {
+      crop: editCrop.trim() || editingLot.crop,
+      quantity: numQty,
+      pricePerKg: numPrice,
+      basePrice: numPrice,
+      expectedPrice: numPrice,
+      location: editLocation.trim() || editingLot.location,
+      grade: editGrade,
+      moisture: Number(editMoisture) || 12,
+      description: editDescription.trim(),
+      imageUrl: editImage || editingLot.imageUrl,
+    });
+
+    setListings(updated);
+    setEditModalOpen(false);
+    setSuccessToast(`🎉 Produce lot ${editCrop || editingLot.crop} (${numQty}kg at ₹${numPrice}/kg) updated successfully!`);
+    setTimeout(() => setSuccessToast(''), 4500);
+  }
+
+  function handleDeleteProduce(lot) {
+    if (window.confirm(`Are you sure you want to delete your ${lot.crop} lot (${lot.quantity}kg)? This action will remove it from the marketplace.`)) {
+      const updated = removeCustomListing(lot.id);
+      setListings(updated);
+      setSuccessToast(`Produce lot ${lot.crop} was removed.`);
+      setTimeout(() => setSuccessToast(''), 4000);
+    }
+  }
 
   // Listen for voice assistant event to open publish produce modal
   useEffect(() => {
@@ -391,9 +508,10 @@ export default function Marketplace() {
 
   // Helper to determine if produce is listed by the logged-in farmer
   function isLotOwnedByFarmer(lot) {
-    if (!isFarmer || !user?.name) return false;
-    const cleanUser = user.name.trim().toLowerCase();
-    const cleanFarmer = (lot.farmer || '').trim().toLowerCase();
+    if (!isFarmer || !user) return false;
+    if (lot.farmerId && user.uid && lot.farmerId === user.uid) return true;
+    const cleanUser = (user.name || '').trim().toLowerCase();
+    const cleanFarmer = (lot.farmer || lot.farmerName || '').trim().toLowerCase();
     const cleanPhone = (user?.phone || '').replace(/\D/g, '');
     const lotPhone = (lot.farmerPhone || '').replace(/\D/g, '');
     const phoneMatch = cleanPhone && lotPhone && cleanPhone.slice(-10) === lotPhone.slice(-10);
@@ -819,6 +937,8 @@ export default function Marketplace() {
                     onBidClick={handleOpenBidModal}
                     onViewLotClick={handleOpenViewLotModal}
                     onAdminRemoveListing={handleAdminRemoveListing}
+                    onEditClick={handleOpenEditModal}
+                    onDeleteClick={handleDeleteProduce}
                   />
                 </div>
               ))}
@@ -1104,6 +1224,181 @@ export default function Marketplace() {
                   }}
                 >
                   <span>🚀 Publish to Marketplace</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── FARMER EDIT PRODUCE MODAL ─────────────────────────────────────── */}
+      {editModalOpen && editingLot && (
+        <div
+          id="edit-produce-modal-backdrop"
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1200,
+            background: 'rgba(5, 46, 43, 0.65)', backdropFilter: 'blur(6px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+          }}
+          onClick={(e) => { if (e.target.id === 'edit-produce-modal-backdrop') setEditModalOpen(false); }}
+        >
+          <div style={{
+            background: '#FFFFFF', borderRadius: 16,
+            maxWidth: 540, width: '100%', maxHeight: '90vh', overflowY: 'auto',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.25)',
+            padding: '2rem', position: 'relative',
+          }}>
+            {/* Close Button */}
+            <button
+              id="close-edit-modal-btn"
+              onClick={() => setEditModalOpen(false)}
+              style={{
+                position: 'absolute', top: '1.25rem', right: '1.25rem',
+                background: '#F3F4F6', border: 'none', borderRadius: '50%',
+                width: 32, height: 32, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '1rem', color: '#4B5563',
+              }}
+            >
+              ✕
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>✏️</span>
+              <h2 style={{ fontSize: '1.4rem', color: '#052E2B', margin: 0 }}>Edit Produce Lot Details</h2>
+            </div>
+            <p style={{ color: '#6B7280', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+              Update your quantity, expected price per kg, farm location, or grade. Changes will update in real-time across the marketplace.
+            </p>
+
+            <form onSubmit={handleSaveEditProduce} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                  Crop Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editCrop}
+                  onChange={e => setEditCrop(e.target.value)}
+                  className="input"
+                  style={{ width: '100%' }}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                    Quantity (kg) *
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={editQuantity}
+                    onChange={e => setEditQuantity(e.target.value)}
+                    className="input"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                    Expected Price / kg (₹) *
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    step="0.5"
+                    required
+                    value={editPrice}
+                    onChange={e => setEditPrice(e.target.value)}
+                    className="input"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                    Farm / Mandi Location *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editLocation}
+                    onChange={e => setEditLocation(e.target.value)}
+                    className="input"
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                    Quality Grade
+                  </label>
+                  <select
+                    value={editGrade}
+                    onChange={e => setEditGrade(e.target.value)}
+                    className="input select"
+                    style={{ width: '100%' }}
+                  >
+                    <option value="A+">Grade A+ (Export Quality)</option>
+                    <option value="A">Grade A (Premium)</option>
+                    <option value="B+">Grade B+ (Good)</option>
+                    <option value="B">Grade B (Standard)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                  Description / Harvest Notes
+                </label>
+                <textarea
+                  rows="3"
+                  value={editDescription}
+                  onChange={e => setEditDescription(e.target.value)}
+                  className="input"
+                  style={{ width: '100%', resize: 'vertical' }}
+                  placeholder="Describe produce freshness, packing, harvest date..."
+                />
+              </div>
+
+              {/* Total Estimated Lot Value */}
+              <div style={{
+                background: '#F9FAFB', border: '1px solid #E5E7EB',
+                borderRadius: 10, padding: '0.75rem 1rem',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              }}>
+                <div style={{ fontSize: '0.8rem', color: '#6B7280' }}>Estimated Lot Total:</div>
+                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#052E2B' }}>
+                  ₹{((Number(editQuantity) || 0) * (Number(editPrice) || 0)).toLocaleString('en-IN')}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.25rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setEditModalOpen(false)}
+                  style={{
+                    flex: 1, padding: '0.75rem', borderRadius: 8,
+                    background: '#F3F4F6', border: '1px solid #E5E7EB',
+                    fontWeight: 600, color: '#4B5563', cursor: 'pointer',
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  id="confirm-save-edit-produce-btn"
+                  type="submit"
+                  style={{
+                    flex: 2, padding: '0.75rem', borderRadius: 8,
+                    background: '#052E2B', color: 'white',
+                    fontWeight: 700, border: 'none', cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(5, 46, 43, 0.3)',
+                  }}
+                >
+                  Save Changes
                 </button>
               </div>
             </form>

@@ -1,0 +1,163 @@
+[
+  {
+    "buyerId": "user_buyer_1789048169488",
+    "companyName": "Heritage Foods Ltd",
+    "businessType": "Wholesaler",
+    "gstin": "",
+    "verifiedBuyer": false,
+    "preferredCrops": [
+      "Tomato",
+      "Chilli",
+      "Rice"
+    ],
+    "maxBudget": 500000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Guntur Hub",
+        "district": "Guntur"
+      }
+    ],
+    "totalPurchases": 0,
+    "totalSpent": 0,
+    "buyerRating": 5,
+    "createdAt": "2026-09-10T13:49:29.525Z",
+    "updatedAt": "2026-09-10T13:49:29.525Z",
+    "id": "user_buyer_1789048169488"
+  },
+  {
+    "buyerId": "demo_buyer_1",
+    "companyName": "Priya Spices & Foods Ltd",
+    "businessType": "Agro Exporter",
+    "gstin": "37AAAAA0000A1Z5",
+    "verifiedBuyer": true,
+    "preferredCrops": [
+      "Chilli",
+      "Turmeric",
+      "Cotton"
+    ],
+    "maxBudget": 2500000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Guntur Central Hub",
+        "district": "Guntur"
+      }
+    ],
+    "totalPurchases": 0,
+    "totalSpent": 0,
+    "buyerRating": 5,
+    "createdAt": "2026-09-10T12:25:03.033Z",
+    "updatedAt": "2026-09-10T12:25:14.266Z",
+    "id": "demo_buyer_1"
+  },
+  {
+    "buyerId": "user_buyer_1789041818234",
+    "companyName": "Singhania Spice Exports Ltd.",
+    "businessType": "Exporter",
+    "gstin": "",
+    "verifiedBuyer": false,
+    "preferredCrops": [
+      "Tomato",
+      "Chilli",
+      "Rice"
+    ],
+    "maxBudget": 500000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Vijayawada Commercial Hub Hub",
+        "district": "Vijayawada Commercial Hub"
+      }
+    ],
+    "totalPurchases": 0,
+    "totalSpent": 0,
+    "buyerRating": 5,
+    "createdAt": "2026-09-10T12:03:38.235Z",
+    "updatedAt": "2026-09-10T12:03:38.235Z",
+    "id": "user_buyer_1789041818234"
+  },
+  {
+    "buyerId": "user_buyer_1789041625861",
+    "companyName": "Godavari Agro Millers Pvt Ltd",
+    "businessType": "Food Processor",
+    "gstin": "",
+    "verifiedBuyer": false,
+    "preferredCrops": [
+      "Tomato",
+      "Chilli",
+      "Rice"
+    ],
+    "maxBudget": 500000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Rajahmundry Hub",
+        "district": "Rajahmundry"
+      }
+    ],
+    "totalPurchases": 0,
+    "totalSpent": 0,
+    "buyerRating": 5,
+    "createdAt": "2026-09-10T12:00:25.862Z",
+    "updatedAt": "2026-09-10T12:00:25.862Z",
+    "id": "user_buyer_1789041625861"
+  },
+  {
+    "buyerId": "buyer_krishna",
+    "companyName": "Krishna Fresh Foods",
+    "businessType": "Wholesaler",
+    "gstin": "37AAECK9928A1Z2",
+    "verifiedBuyer": true,
+    "preferredCrops": [
+      "Tomato",
+      "Rice"
+    ],
+    "preferredGrades": [
+      "A",
+      "B+"
+    ],
+    "maxBudget": 1000000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Vijayawada Central Mandi Cold Storage",
+        "address": "NH-16 By-pass",
+        "district": "Vijayawada",
+        "pincode": "520001"
+      }
+    ],
+    "totalPurchases": 19,
+    "totalSpent": 420000,
+    "buyerRating": 4.5,
+    "createdAt": "2026-09-03T10:00:00.000Z",
+    "updatedAt": "2026-09-10T11:56:58.761Z",
+    "id": "buyer_krishna"
+  },
+  {
+    "buyerId": "buyer_srinivas",
+    "companyName": "Priya Spices & Foods Ltd",
+    "businessType": "Agro Exporter",
+    "gstin": "37AABCS1429B1Z8",
+    "verifiedBuyer": true,
+    "preferredCrops": [
+      "Chilli",
+      "Turmeric",
+      "Cotton"
+    ],
+    "preferredGrades": [
+      "A+",
+      "A"
+    ],
+    "maxBudget": 2500000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Guntur Export Depot",
+        "address": "Plot 42, Auto Nagar",
+        "district": "Guntur",
+        "pincode": "522001"
+      }
+    ],
+    "totalPurchases": 28,
+    "totalSpent": 850000,
+    "buyerRating": 4.8,
+    "createdAt": "2026-09-02T09:00:00.000Z",
+    "updatedAt": "2026-09-10T13:37:02.019Z",
+    "id": "buyer_srinivas"
+  }
+]

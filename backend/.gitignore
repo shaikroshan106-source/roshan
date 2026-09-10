@@ -1,0 +1,19 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Service account private keys
+*serviceAccount*.json
+*credentials*.json
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Public uploads
+public/uploads/*
+!public/uploads/.gitkeep

@@ -1,0 +1,187 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper Functions ──
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.role == 'admin' ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         getUserData().role == 'admin')
+      );
+    }
+
+    function hasRole(role) {
+      return isSignedIn() && (
+        request.auth.token.role == role ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         getUserData().role == role)
+      );
+    }
+
+    function isNotSuspended() {
+      return !exists(/databases/$(database)/documents/users/$(request.auth.uid)) ||
+             getUserData().status != 'suspended';
+    }
+
+    // ── 1. Users Collection ──
+    match /users/{userId} {
+      // User can read their own profile, admin can read any profile
+      allow read: if isOwner(userId) || isAdmin();
+      // User can create their initial profile during sign-up
+      allow create: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      // User can update profile details, but cannot elevate their role or unsuspend themselves
+      allow update: if (isOwner(userId) &&
+                        request.resource.data.role == resource.data.role &&
+                        request.resource.data.status == resource.data.status) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── 2. Farmers Collection ──
+    match /farmers/{farmerId} {
+      // Public directory read for marketplace transparency
+      allow read: if true;
+      allow create: if (isOwner(farmerId) && isNotSuspended()) || isAdmin();
+      allow update: if (isOwner(farmerId) && isNotSuspended()) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── 3. Buyers Collection ──
+    match /buyers/{buyerId} {
+      // Public read for verified buyer lookup
+      allow read: if true;
+      allow create: if (isOwner(buyerId) && isNotSuspended()) || isAdmin();
+      allow update: if (isOwner(buyerId) && isNotSuspended()) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── 4. Products & Listings Collections ──
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if (hasRole('farmer') && isNotSuspended()) || isAdmin();
+      allow update: if (resource.data.farmerId == request.auth.uid && isNotSuspended()) || isAdmin();
+      allow delete: if (resource.data.farmerId == request.auth.uid && isNotSuspended()) || isAdmin();
+    }
+
+    match /listings/{listingId} {
+      allow read: if true;
+      allow create: if (hasRole('farmer') && isNotSuspended()) || isAdmin();
+      allow update: if (resource.data.farmerId == request.auth.uid && isNotSuspended()) || isAdmin();
+      allow delete: if (resource.data.farmerId == request.auth.uid && isNotSuspended()) || isAdmin();
+    }
+
+    // ── 5. Bids Collection ──
+    match /bids/{bidId} {
+      // Bids readable by buyer who placed it, lot owner, or admin
+      allow read: if isSignedIn() && (
+        resource.data.buyerId == request.auth.uid ||
+        get(/databases/$(database)/documents/products/$(resource.data.lotId)).data.farmerId == request.auth.uid ||
+        isAdmin()
+      );
+      // Only buyers can place bids on active lots
+      allow create: if isSignedIn() &&
+                    isNotSuspended() &&
+                    request.resource.data.buyerId == request.auth.uid;
+      // Buyer can revise bid before accepted; lot farmer can accept/reject; admin has full moderation
+      allow update: if isSignedIn() && isNotSuspended() && (
+        (resource.data.buyerId == request.auth.uid && resource.data.status != 'accepted') ||
+        get(/databases/$(database)/documents/products/$(resource.data.lotId)).data.farmerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if (resource.data.buyerId == request.auth.uid && resource.data.status != 'accepted') || isAdmin();
+    }
+
+    // ── 6. Orders Collection ──
+    match /orders/{orderId} {
+      // Orders accessible only to the participating buyer, farmer, or admin
+      allow read: if isSignedIn() && (
+        resource.data.buyerId == request.auth.uid ||
+        resource.data.farmerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isSignedIn() && isNotSuspended() && (
+        request.resource.data.buyerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow update: if isSignedIn() && isNotSuspended() && (
+        resource.data.buyerId == request.auth.uid ||
+        resource.data.farmerId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ── 7. Transactions Collection ──
+    match /transactions/{txnId} {
+      // Financial transactions accessible only to payer, payee, or platform admin
+      allow read: if isSignedIn() && (
+        resource.data.payerId == request.auth.uid ||
+        resource.data.payeeId == request.auth.uid ||
+        isAdmin()
+      );
+      // Only created through verified order escrow logic or admin
+      allow create: if isSignedIn() && isNotSuspended();
+      allow update, delete: if isAdmin();
+    }
+
+    // ── 8. Complaints Collection ──
+    match /complaints/{complaintId} {
+      // Reporter can view their complaint; Admin can view all
+      allow read: if isSignedIn() && (
+        resource.data.reporterId == request.auth.uid ||
+        isAdmin()
+      );
+      // Any authenticated user can submit a complaint
+      allow create: if isSignedIn() &&
+                    request.resource.data.reporterId == request.auth.uid;
+      // Only admin can resolve complaints or suspend counterparties
+      allow update, delete: if isAdmin();
+    }
+
+    // ── 9. Reports Collection ──
+    match /reports/{reportId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isNotSuspended();
+      allow update, delete: if (resource.data.authorId == request.auth.uid) || isAdmin();
+    }
+
+    // ── 10. Notifications Collection ──
+    match /notifications/{notifId} {
+      allow read: if isSignedIn() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create, delete: if isSignedIn();
+    }
+
+    // ── 11. Market Prices Collection ──
+    match /market_prices/{priceId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── 12. Settings & Admin Configuration ──
+    match /settings/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Deny all other collections by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

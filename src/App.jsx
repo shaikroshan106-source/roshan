@@ -27,16 +27,16 @@ export default function App() {
           <Route path="/problem" element={<Problem />} />
           <Route path="/ai"      element={<Navigate to="/marketplace" replace />} />
           <Route path="/login"   element={<Login />} />
-          <Route path="/report"  element={<Report />} />
 
-          {/* ── Protected (Farmer + Buyer + Admin) ─────── */}
-          <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
-          <Route path="/dashboard"   element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/bidding"     element={<ProtectedRoute><Bidding /></ProtectedRoute>} />
-          <Route path="/logistics"   element={<ProtectedRoute><Logistics /></ProtectedRoute>} />
+          {/* ── Protected (Farmer & Buyer) ──────────────── */}
+          <Route path="/report"      element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Report /></ProtectedRoute>} />
+          <Route path="/marketplace" element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Marketplace /></ProtectedRoute>} />
+          <Route path="/dashboard"   element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Dashboard /></ProtectedRoute>} />
+          <Route path="/bidding"     element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Bidding /></ProtectedRoute>} />
+          <Route path="/logistics"   element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Logistics /></ProtectedRoute>} />
 
           {/* ── Admin only ──────────────────────────────── */}
-          <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute adminOnly allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
         </Routes>
         <Footer />
         <FarmAIChat />
