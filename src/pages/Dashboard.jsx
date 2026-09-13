@@ -1633,35 +1633,152 @@ function BuyerDashboard({ user }) {
 
 // ─── Admin Dashboard ──────────────────────────────────────────────────────────
 function AdminDashboard({ user }) {
+  const [adminViewMode, setAdminViewMode] = useState('overview'); // 'overview' | 'preview-farmer' | 'preview-buyer'
+
   return (
-    <div className="grid grid-2">
-      <div className="card">
-        <h4>Platform Overview</h4>
-        <div className="grid grid-2" style={{ gap: '1rem', marginTop: '1rem' }}>
-          {[
-            { l: 'Total Farmers', v: '1,240' },
-            { l: 'Total Buyers', v: '380' },
-            { l: 'Active Lots', v: '47' },
-            { l: 'Trade Volume', v: '₹2.4Cr' },
-          ].map((s, i) => (
-            <div key={i} className="stat-card" style={{ padding: '1rem' }}>
-              <div className="stat-value" style={{ fontSize: '1.4rem' }}>{s.v}</div>
-              <div className="stat-label">{s.l}</div>
-            </div>
-          ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      {/* Super Admin Control Bar */}
+      <div style={{
+        background: 'linear-gradient(135deg, #052E2B, #1B5E20)',
+        border: '1.5px solid #10B981',
+        borderRadius: 14, padding: '1.25rem 1.5rem',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem',
+        color: 'white',
+      }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <span style={{ fontSize: '1.3rem' }}>⚙️</span>
+            <strong style={{ fontSize: '1.1rem' }}>Super Admin Portal Hub</strong>
+            <span style={{ background: 'rgba(0,229,199,0.2)', color: '#A7F3D0', padding: '2px 8px', borderRadius: 10, fontSize: '0.72rem', fontWeight: 800 }}>
+              FULL ACCESS
+            </span>
+          </div>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'rgba(255,255,255,0.75)' }}>
+            Switch between Platform Overview, Farmer Experience Preview, and Buyer Experience Preview.
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setAdminViewMode('overview')}
+            style={{
+              padding: '0.45rem 0.9rem', borderRadius: 8, fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer',
+              background: adminViewMode === 'overview' ? '#10B981' : 'rgba(255,255,255,0.1)',
+              color: 'white', border: '1px solid rgba(255,255,255,0.2)',
+            }}
+          >
+            📊 Platform Hub
+          </button>
+          <button
+            onClick={() => setAdminViewMode('preview-farmer')}
+            style={{
+              padding: '0.45rem 0.9rem', borderRadius: 8, fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer',
+              background: adminViewMode === 'preview-farmer' ? '#10B981' : 'rgba(255,255,255,0.1)',
+              color: 'white', border: '1px solid rgba(255,255,255,0.2)',
+            }}
+          >
+            👨‍🌾 Preview Farmer View
+          </button>
+          <button
+            onClick={() => setAdminViewMode('preview-buyer')}
+            style={{
+              padding: '0.45rem 0.9rem', borderRadius: 8, fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer',
+              background: adminViewMode === 'preview-buyer' ? '#10B981' : 'rgba(255,255,255,0.1)',
+              color: 'white', border: '1px solid rgba(255,255,255,0.2)',
+            }}
+          >
+            🏪 Preview Buyer View
+          </button>
+          <Link
+            to="/admin"
+            style={{
+              padding: '0.45rem 0.9rem', borderRadius: 8, fontSize: '0.82rem', fontWeight: 700,
+              background: '#7C5CFF', color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px'
+            }}
+          >
+            <span>⚙️</span> Go to Admin Panel ↗
+          </Link>
         </div>
       </div>
-      <div className="card--ai card">
-        <h4 style={{ color: 'white' }}>AI Engine Status</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
-          {['Price Prediction', 'Buyer Matching', 'Route Optimization', 'Demand Forecast'].map(name => (
-            <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.88rem' }}>{name}</span>
-              <span className="badge badge-ai" style={{ fontSize: '0.7rem' }}>✓ Active</span>
-            </div>
-          ))}
+
+      {adminViewMode === 'preview-farmer' && (
+        <div>
+          <div style={{ padding: '0.5rem 1rem', background: '#FEF3C7', color: '#92400E', borderRadius: 8, fontSize: '0.82rem', fontWeight: 700, marginBottom: '1rem' }}>
+            ℹ️ Viewing Simulated Farmer Dashboard Experience (Read &amp; Test Mode)
+          </div>
+          <FarmerDashboard user={user} />
         </div>
-      </div>
+      )}
+
+      {adminViewMode === 'preview-buyer' && (
+        <div>
+          <div style={{ padding: '0.5rem 1rem', background: '#DBEAFE', color: '#1E40AF', borderRadius: 8, fontSize: '0.82rem', fontWeight: 700, marginBottom: '1rem' }}>
+            ℹ️ Viewing Simulated Buyer Dashboard Experience (Read &amp; Test Mode)
+          </div>
+          <BuyerDashboard user={user} />
+        </div>
+      )}
+
+      {adminViewMode === 'overview' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {/* Direct module launch cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+            {[
+              { to: '/admin', icon: '⚙️', title: 'Admin Control Center', desc: 'Arbitrate disputes, manage complaints & users', color: '#7C5CFF' },
+              { to: '/marketplace', icon: '🛒', title: 'Live Marketplace', desc: 'Inspect produce listings & moderate fraudulent lots', color: '#00E5C7' },
+              { to: '/bidding', icon: '🏷️', title: 'Auction Bidding Room', desc: 'Surveil live bidding activity & delete shill bids', color: '#F5A623' },
+              { to: '/logistics', icon: '🚛', title: 'Logistics & Fleet', desc: 'Track active dispatches, routes & shipments', color: '#42A5F5' },
+            ].map((m, i) => (
+              <Link
+                key={i}
+                to={m.to}
+                style={{
+                  background: 'white', borderRadius: 12, padding: '1.25rem', textDecoration: 'none',
+                  border: '1px solid #E5E7EB', boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                  display: 'flex', flexDirection: 'column', gap: '0.5rem', transition: 'all 0.2s ease',
+                }}
+              >
+                <div style={{ fontSize: '1.5rem' }}>{m.icon}</div>
+                <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.95rem' }}>{m.title}</div>
+                <div style={{ color: '#6B7280', fontSize: '0.78rem', lineHeight: 1.4 }}>{m.desc}</div>
+                <div style={{ marginTop: 'auto', paddingTop: '0.5rem', color: m.color, fontWeight: 700, fontSize: '0.78rem' }}>
+                  Open Module ↗
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="grid grid-2" style={{ gap: '1.5rem' }}>
+            <div className="card">
+              <h4>Platform Telemetry</h4>
+              <div className="grid grid-2" style={{ gap: '1rem', marginTop: '1rem' }}>
+                {[
+                  { l: 'Total Farmers', v: '1,240' },
+                  { l: 'Total Buyers', v: '380' },
+                  { l: 'Active Lots', v: '47' },
+                  { l: 'Trade Volume', v: '₹2.4Cr' },
+                ].map((s, i) => (
+                  <div key={i} className="stat-card" style={{ padding: '1rem' }}>
+                    <div className="stat-value" style={{ fontSize: '1.4rem' }}>{s.v}</div>
+                    <div className="stat-label">{s.l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="card--ai card">
+              <h4 style={{ color: 'white' }}>AI Engine Status</h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+                {['Price Prediction', 'Buyer Matching', 'Route Optimization', 'Demand Forecast'].map(name => (
+                  <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.88rem' }}>{name}</span>
+                    <span className="badge badge-ai" style={{ fontSize: '0.7rem' }}>✓ Active</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1734,6 +1851,25 @@ export default function Dashboard() {
                 >
                   🛒 Browse Lots
                 </button>
+              )}
+              {role === 'admin' && (
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <Link
+                    to="/admin"
+                    id="dashboard-admin-panel-btn"
+                    className="btn btn-primary"
+                    style={{ background: '#7C5CFF', borderColor: '#7C5CFF' }}
+                  >
+                    ⚙️ Open Full Admin Panel
+                  </Link>
+                  <Link
+                    to="/marketplace"
+                    className="btn btn-secondary"
+                    style={{ background: 'rgba(255,255,255,0.15)', color: 'white', borderColor: 'rgba(255,255,255,0.3)' }}
+                  >
+                    🛒 Marketplace
+                  </Link>
+                </div>
               )}
             </div>
           </div>

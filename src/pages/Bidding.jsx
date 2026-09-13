@@ -11,6 +11,8 @@ import {
   rejectBidForLot,
   editBidOnLot,
   cancelBidOnLot,
+  removeFraudulentBid,
+  removeFraudulentListing,
 } from '../utils/biddingStore';
 import { resolveProduceImage } from '../utils/produceImageResolver';
 import biddingHeroImg from '../assets/bidding-hero.jpg';
@@ -111,6 +113,7 @@ export default function Bidding() {
 
   const isFarmer = isLoggedIn && role === 'farmer';
   const isBuyer  = isLoggedIn && role === 'buyer';
+  const isAdmin  = isLoggedIn && role === 'admin';
 
   // Lots and Bids from persistent store
   const [lots, setLots] = useState(getBiddingLots);
@@ -375,6 +378,29 @@ export default function Bidding() {
     }
   };
 
+  // ── SUPER ADMIN: Handle Remove Fraudulent Bid / Lot ─────────────────────
+  const handleAdminDeleteBid = (bid) => {
+    if (window.confirm(`[Super Admin] Delete fraudulent or wash bid of ₹${bid.amount}/kg from ${bid.buyer}?`)) {
+      const res = removeFraudulentBid(bid.id, 'Fraudulent bid removed by Admin');
+      if (res.success) {
+        setActionNotice(`🚫 Fraudulent bid from ${bid.buyer} was removed.`);
+        refreshBiddingData();
+        setTimeout(() => setActionNotice(''), 4500);
+      }
+    }
+  };
+
+  const handleAdminDeleteLot = (lot) => {
+    if (window.confirm(`[Super Admin] Permanently remove auction lot "${lot.crop}" (ID: ${lot.id}) and all its bids due to policy violation or fraud?`)) {
+      const res = removeFraudulentListing(lot.id, 'Auction lot removed by Admin');
+      if (res.success) {
+        setActionNotice(`🚨 Auction lot "${lot.crop}" was removed.`);
+        refreshBiddingData();
+        setTimeout(() => setActionNotice(''), 4500);
+      }
+    }
+  };
+
   return (
     <main style={{ paddingTop: 68, minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* Toast Notice */}
@@ -412,21 +438,23 @@ export default function Bidding() {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.35rem' }}>
                 <span className="section-label" style={{ color: 'rgba(255,255,255,0.7)', margin: 0 }}>
-                  {isFarmer ? '👨‍🌾 Farmer Auction Hub' : isBuyer ? '🏪 Buyer Live Bidding Room' : 'Live Agri Auction'}
+                  {isAdmin ? '🛡️ Super Admin Auction Supervision' : isFarmer ? '👨‍🌾 Farmer Auction Hub' : isBuyer ? '🏪 Buyer Live Bidding Room' : 'Live Agri Auction'}
                 </span>
                 <span style={{
-                  background: isFarmer ? 'rgba(76,175,80,0.2)' : '#F5A623',
-                  color: isFarmer ? '#A7F3D0' : '#1F2937',
+                  background: isAdmin ? '#7C5CFF' : isFarmer ? 'rgba(76,175,80,0.2)' : '#F5A623',
+                  color: isAdmin ? '#FFFFFF' : isFarmer ? '#A7F3D0' : '#1F2937',
                   padding: '2px 8px', borderRadius: 12, fontSize: '0.72rem', fontWeight: 700,
                 }}>
-                  {isFarmer ? 'Farmer View: Manage & Accept' : isBuyer ? 'Buyer View: Bid & Compete' : 'Live Trading'}
+                  {isAdmin ? 'Super Admin Mode' : isFarmer ? 'Farmer View: Manage & Accept' : isBuyer ? 'Buyer View: Bid & Compete' : 'Live Trading'}
                 </span>
               </div>
               <h1 style={{ color: 'white', fontSize: '2.2rem', marginBottom: '0.5rem' }}>
-                {isFarmer ? 'Manage Your Produce & Accept Bids' : 'Place Bids on Farmer Produce'}
+                {isAdmin ? 'Super Admin Auction & Bidding Oversight' : isFarmer ? 'Manage Your Produce & Accept Bids' : 'Place Bids on Farmer Produce'}
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.8)', maxWidth: 650, margin: 0, fontSize: '0.92rem' }}>
-                {isFarmer
+                {isAdmin
+                  ? 'Real-time surveillance of all active agricultural auctions, bidder verifications, fair-price compliance, and fraud moderation.'
+                  : isFarmer
                   ? 'Publish your crops with base prices, inspect incoming bids from verified buyers, and accept the offer you like to finalize the deal.'
                   : 'Compete in real-time auctions on produce directly harvested by verified farmers across Andhra Pradesh & Telangana.'}
               </p>
@@ -1060,6 +1088,54 @@ export default function Bidding() {
                     </div>
                   </div>
                 </div>
+              ) : isAdmin ? (
+                /* SUPER ADMIN VIEW: Auction Supervision & Moderation Controls */
+                <div className="card" style={{ padding: '1.5rem', background: '#FFFFFF', border: '1.5px solid #7C5CFF', borderRadius: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ fontSize: '1.3rem' }}>🛡️</span>
+                      <h4 style={{ margin: 0, color: '#7C5CFF' }}>Admin Auction Oversight</h4>
+                    </div>
+                    <span style={{ background: 'rgba(124,92,255,0.12)', color: '#7C5CFF', padding: '2px 8px', borderRadius: 10, fontSize: '0.72rem', fontWeight: 800 }}>
+                      SUPER ADMIN
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+                    You are monitoring the live auction for <strong>{activeLot.crop}</strong> (Lot ID: {activeLot.id}) published by <strong>{activeLot.farmer}</strong>. You have supervisor access to remove fraudulent listings or delete shill bids.
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <button
+                      id="admin-remove-auction-lot-btn"
+                      type="button"
+                      onClick={() => handleAdminDeleteLot(activeLot)}
+                      style={{
+                        padding: '0.75rem', borderRadius: 8,
+                        background: '#FEF2F2', border: '1.5px solid #F87171',
+                        color: '#DC2626', fontWeight: 700, fontSize: '0.85rem',
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        transition: 'all 0.15s ease'
+                      }}
+                      title="Permanently remove this lot and cancel its bids"
+                    >
+                      <span>🚨</span>
+                      <span>Remove Auction Lot (Fraud / Violation)</span>
+                    </button>
+
+                    <Link
+                      to="/admin"
+                      style={{
+                        padding: '0.65rem', borderRadius: 8,
+                        background: 'rgba(124,92,255,0.08)', border: '1px solid rgba(124,92,255,0.3)',
+                        color: '#7C5CFF', fontWeight: 700, fontSize: '0.85rem',
+                        textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                      }}
+                    >
+                      <span>⚙️</span>
+                      <span>Manage from Admin Panel</span>
+                    </Link>
+                  </div>
+                </div>
               ) : (
                 /* Guest View */
                 <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
@@ -1255,6 +1331,26 @@ export default function Bidding() {
                                   <span>Withdraw</span>
                                 </button>
                               </div>
+                            )}
+
+                            {/* SUPER ADMIN MODERATION ON ANY BID */}
+                            {isAdmin && !isLotAccepted && (
+                              <button
+                                id={`admin-del-bid-${bid.id}`}
+                                onClick={() => handleAdminDeleteBid(bid)}
+                                style={{
+                                  background: '#FEF2F2', color: '#DC2626',
+                                  border: '1.5px solid #F87171', borderRadius: 8,
+                                  padding: '0.45rem 0.75rem', fontSize: '0.78rem',
+                                  fontWeight: 700, cursor: 'pointer',
+                                  display: 'inline-flex', alignItems: 'center', gap: '0.25rem',
+                                  transition: 'all 0.15s ease',
+                                }}
+                                title="Admin: Remove fraudulent or wash bid"
+                              >
+                                <span>🚫</span>
+                                <span>Remove Fraud</span>
+                              </button>
                             )}
                           </div>
                         </div>

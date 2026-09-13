@@ -1,0 +1,50 @@
+[
+  {
+    "farmerId": "farmer_lakshmi",
+    "aadhaarVerified": true,
+    "farmAddress": {
+      "village": "Tenali Delta",
+      "mandal": "Tenali",
+      "district": "Guntur",
+      "pincode": "522201"
+    },
+    "nearestMandi": "Guntur Mirchi & Grain Mandi",
+    "totalAcreage": 22,
+    "cropsCultivated": [
+      "Rice",
+      "Cotton",
+      "Maize"
+    ],
+    "totalLotsListed": 8,
+    "totalVolumeSold": 42000,
+    "totalRevenue": 512000,
+    "farmerRating": 4.8,
+    "createdAt": "2026-09-02T09:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:32.357Z",
+    "id": "farmer_lakshmi"
+  },
+  {
+    "farmerId": "farmer_ravi",
+    "aadhaarVerified": true,
+    "farmAddress": {
+      "village": "Anandapuram",
+      "mandal": "Bheemunipatnam",
+      "district": "Visakhapatnam",
+      "pincode": "530052"
+    },
+    "nearestMandi": "Anandapuram Rythu Mandi",
+    "totalAcreage": 14.5,
+    "cropsCultivated": [
+      "Tomato",
+      "Chilli",
+      "Rice"
+    ],
+    "totalLotsListed": 13,
+    "totalVolumeSold": 28500,
+    "totalRevenue": 245000,
+    "farmerRating": 4.9,
+    "createdAt": "2026-09-01T08:00:00.000Z",
+    "updatedAt": "2026-09-12T05:47:25.877Z",
+    "id": "farmer_ravi"
+  }
+]

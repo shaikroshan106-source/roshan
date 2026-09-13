@@ -1,0 +1,57 @@
+[
+  {
+    "id": "ORD_2026_695081",
+    "productId": "LOT_1789192044846",
+    "bidId": "BID_1789192072178",
+    "farmerId": "farmer_ravi",
+    "farmerName": "Ravi Kumar",
+    "buyerId": "buyer_srinivas",
+    "buyerName": "Srinivas M.",
+    "crop": "guava",
+    "quantity": 70,
+    "unit": "kg",
+    "unitPrice": 100,
+    "subtotalAmount": 7000,
+    "logisticsFee": 1800,
+    "platformFee": 70,
+    "totalAmount": 8870,
+    "orderStatus": "pending_payment",
+    "escrowStatus": "awaiting_deposit",
+    "deliveryAddress": {
+      "hubName": "Buyer Mandi Depot",
+      "district": "Vizag"
+    },
+    "createdAt": "2026-09-12T05:48:33.885Z",
+    "updatedAt": "2026-09-12T05:48:33.885Z"
+  },
+  {
+    "id": "ORD_2026_1001",
+    "productId": "L003",
+    "bidId": "BID_005",
+    "farmerId": "farmer_ravi",
+    "farmerName": "Ravi Kumar",
+    "buyerId": "buyer_srinivas",
+    "buyerName": "Srinivas Agro Exports Pvt Ltd",
+    "crop": "Chilli",
+    "quantity": 800,
+    "unit": "kg",
+    "unitPrice": 64,
+    "subtotalAmount": 51200,
+    "logisticsFee": 1800,
+    "platformFee": 512,
+    "totalAmount": 53512,
+    "orderStatus": "completed",
+    "escrowStatus": "released_to_farmer",
+    "logisticsProvider": "Coastal Freight Logistics",
+    "truckNumber": "AP 31 TJ 9204",
+    "deliveryAddress": {
+      "hubName": "Guntur Export Depot",
+      "address": "Plot 42, Auto Nagar",
+      "district": "Guntur",
+      "pincode": "522001"
+    },
+    "completedAt": "2026-09-05T16:00:00.000Z",
+    "createdAt": "2026-09-04T12:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:34.441Z"
+  }
+]

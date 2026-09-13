@@ -1,0 +1,42 @@
+[
+  {
+    "id": "REP_BUYER_1725610002",
+    "reportType": "buyer_procurement_summary",
+    "authorId": "buyer_srinivas",
+    "authorRole": "buyer",
+    "title": "Monthly Procurement Demand Bulletin - Guntur Mandi",
+    "region": "Guntur",
+    "crop": "Chilli",
+    "data": {
+      "targetProcurementTons": 120,
+      "acceptedGrades": [
+        "A+",
+        "A"
+      ],
+      "offeredPriceRange": "₹62 - ₹68 / kg",
+      "escrowReleaseSLA": "Within 2 hours of weighbridge receipt"
+    },
+    "published": true,
+    "createdAt": "2026-09-07T11:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:35.468Z"
+  },
+  {
+    "id": "REP_FARMER_1725610001",
+    "reportType": "farmer_harvest_forecast",
+    "authorId": "farmer_ravi",
+    "authorRole": "farmer",
+    "title": "Kharif Harvest Yield & Quality Forecast - Visakhapatnam",
+    "region": "Vizag",
+    "crop": "Tomato",
+    "data": {
+      "cultivatedAcreage": 6,
+      "projectedYieldKg": 18000,
+      "expectedHarvestDate": "2026-09-25",
+      "aiQualityGrade": "A",
+      "estimatedRevenue": 540000
+    },
+    "published": true,
+    "createdAt": "2026-09-08T09:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:35.465Z"
+  }
+]

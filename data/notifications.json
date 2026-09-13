@@ -1,0 +1,62 @@
+[
+  {
+    "id": "NOTIF_1789192113893",
+    "userId": "buyer_srinivas",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for guava!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹100/kg for 70 kg of guava. Order ORD_2026_695081 created.",
+    "metadata": {
+      "lotId": "LOT_1789192044846",
+      "bidId": "BID_1789192072178",
+      "orderId": "ORD_2026_695081",
+      "totalValue": 8870
+    },
+    "read": false,
+    "createdAt": "2026-09-12T05:48:33.893Z",
+    "updatedAt": "2026-09-12T05:48:33.893Z"
+  },
+  {
+    "id": "NOTIF_1789192073247",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on guava",
+    "message": "Srinivas M. placed an offer of ₹100/kg on your guava lot.",
+    "metadata": {
+      "lotId": "LOT_1789192044846",
+      "bidId": "BID_1789192072178",
+      "amount": 100
+    },
+    "read": false,
+    "createdAt": "2026-09-12T05:47:53.247Z",
+    "updatedAt": "2026-09-12T05:47:53.247Z"
+  },
+  {
+    "id": "NOTIF_002",
+    "userId": "buyer_srinivas",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Chilli!",
+    "message": "Farmer Ravi Kumar accepted your offer of ₹64/kg for 800kg Chilli. Order ORD_2026_1001 created.",
+    "metadata": {
+      "orderId": "ORD_2026_1001",
+      "lotId": "L003"
+    },
+    "read": false,
+    "createdAt": "2026-09-04T12:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:37.004Z"
+  },
+  {
+    "id": "NOTIF_001",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Bid on Tomato Lot",
+    "message": "Krishna Fresh Foods placed an offer of ₹29.0/kg on your 500kg Tomato lot.",
+    "metadata": {
+      "lotId": "L001",
+      "bidId": "BID_003",
+      "amount": 29
+    },
+    "read": false,
+    "createdAt": "2026-09-02T11:02:00.000Z",
+    "updatedAt": "2026-09-12T05:30:37.001Z"
+  }
+]

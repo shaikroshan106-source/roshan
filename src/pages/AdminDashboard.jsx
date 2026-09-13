@@ -1,16 +1,62 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { getComplaints, updateComplaintStatus, getSuspendedUsers, isUserSuspended, toggleSuspendReportedUser } from '../utils/complaintStore';
 import { getStoredListings } from '../utils/marketplaceStore';
 import { getAllBids, removeFraudulentBid, removeFraudulentListing } from '../utils/biddingStore';
 
 const platformStats = [
-  { icon: '👨‍🌾', label: 'Total Farmers',    value: '1,240',    change: '+34 this week',  color: '#4CAF50' },
-  { icon: '🏪', label: 'Total Buyers',     value: '380',      change: '+12 this week',  color: '#F5A623' },
-  { icon: '📦', label: 'Active Listings',  value: '892',      change: '+67 today',      color: '#00E5C7' },
-  { icon: '💰', label: 'Total Volume',     value: '₹2.4 Cr+', change: '+₹18L this week',color: '#7C5CFF' },
-  { icon: '🤖', label: 'AI Predictions',   value: '94%',      change: 'Accuracy rate',  color: '#FF7043' },
-  { icon: '🚛', label: 'Logistics Orders', value: '234',      change: '18 pending',     color: '#42A5F5' },
+  { id: 'users',       icon: '👨‍🌾', label: 'Total Farmers',    value: '1,240',    change: '+34 this week',  color: '#4CAF50' },
+  { id: 'users',       icon: '🏪', label: 'Total Buyers',     value: '380',      change: '+12 this week',  color: '#F5A623' },
+  { id: 'marketplace', icon: '📦', label: 'Active Listings',  value: '892',      change: '+67 today',      color: '#00E5C7' },
+  { id: 'bidding',     icon: '💰', label: 'Total Volume',     value: '₹2.4 Cr+', change: '+₹18L this week',color: '#7C5CFF' },
+  { id: 'system',      icon: '🤖', label: 'AI Predictions',   value: '94%',      change: 'Accuracy rate',  color: '#FF7043' },
+  { id: 'logistics',   icon: '🚛', label: 'Logistics Orders', value: '234',      change: '18 pending',     color: '#42A5F5' },
+];
+
+const activeLogisticsShipments = [
+  {
+    id: 'TRK-9841',
+    lotId: 'L001',
+    crop: 'Tomato (500 kg)',
+    driver: 'Venkat Rao',
+    driverPhone: '+91 98765 12345',
+    vehicle: 'Mini Truck — AP 09 GH 4521',
+    route: 'Vizag (Seethammadhara) → Guntur (Old Town) via NH-16',
+    status: 'In Transit',
+    statusColor: '#00E5C7',
+    eta: '1h 10m remaining',
+    progress: 68,
+    departed: '10:30 AM',
+  },
+  {
+    id: 'TRK-9842',
+    lotId: 'L002',
+    crop: 'Rice (2,000 kg)',
+    driver: 'Murali Mohan',
+    driverPhone: '+91 94401 88721',
+    vehicle: 'Heavy Hauler — AP 16 JK 8923',
+    route: 'Guntur Rural Mandi → Vijayawada Central Warehouse',
+    status: 'Scheduled',
+    statusColor: '#F5A623',
+    eta: 'Dispatches at 2:00 PM',
+    progress: 15,
+    departed: 'Scheduled',
+  },
+  {
+    id: 'TRK-9843',
+    lotId: 'L003',
+    crop: 'Chilli (800 kg)',
+    driver: 'Satyanarayana',
+    driverPhone: '+91 98480 33419',
+    vehicle: 'Reefer Container — AP 07 RT 3412',
+    route: 'Vizianagaram Mandi → Hyderabad Agri Export Hub',
+    status: 'Delivered',
+    statusColor: '#10B981',
+    eta: 'Delivered & Digitally Signed',
+    progress: 100,
+    departed: '06:00 AM',
+  },
 ];
 
 const recentUsers = [
@@ -118,9 +164,11 @@ export default function AdminDashboard() {
 
   const navItems = [
     { id: 'overview',    icon: '📊', label: 'Overview' },
-    { id: 'complaints',  icon: '⚖️', label: 'Complaint Desk', badge: pendingCount > 0 ? pendingCount : null },
+    { id: 'marketplace', icon: '🛒', label: 'Marketplace', badge: `${liveListings.length}` },
+    { id: 'bidding',     icon: '🏷️', label: 'Bidding Desk', badge: `${liveBids.length}` },
+    { id: 'logistics',   icon: '🚛', label: 'Logistics Fleet', badge: '3 Active' },
+    { id: 'complaints',  icon: '⚖️', label: 'Complaint Desk', badge: pendingCount > 0 ? `${pendingCount}` : null },
     { id: 'users',       icon: '👥', label: 'Users' },
-    { id: 'listings',    icon: '📦', label: 'Listings' },
     { id: 'system',      icon: '⚙️', label: 'System' },
   ];
 
@@ -197,8 +245,10 @@ export default function AdminDashboard() {
               </span>
               {item.badge && (
                 <span style={{
-                  background: '#EF4444', color: 'white', borderRadius: 12,
-                  padding: '1px 7px', fontSize: '0.7rem', fontWeight: 800
+                  background: item.id === 'complaints' ? '#EF4444' : 'rgba(124,92,255,0.25)',
+                  color: item.id === 'complaints' ? 'white' : '#A78BFA',
+                  border: item.id === 'complaints' ? 'none' : '1px solid rgba(124,92,255,0.4)',
+                  borderRadius: 12, padding: '1px 7px', fontSize: '0.7rem', fontWeight: 800
                 }}>
                   {item.badge}
                 </span>
@@ -207,12 +257,69 @@ export default function AdminDashboard() {
           ))}
         </nav>
 
+        {/* Live Portal Quick Jump Links */}
+        <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px solid rgba(124,92,255,0.15)' }}>
+          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', marginBottom: '0.6rem', textTransform: 'uppercase' }}>
+            Live Platform Pages
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+            <Link
+              to="/marketplace"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.6rem',
+                padding: '0.5rem 0.75rem', borderRadius: 8, textDecoration: 'none',
+                color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', fontWeight: 600,
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>🛒</span> <span>Marketplace ↗</span>
+            </Link>
+            <Link
+              to="/dashboard"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.6rem',
+                padding: '0.5rem 0.75rem', borderRadius: 8, textDecoration: 'none',
+                color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', fontWeight: 600,
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>📊</span> <span>Dashboard ↗</span>
+            </Link>
+            <Link
+              to="/bidding"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.6rem',
+                padding: '0.5rem 0.75rem', borderRadius: 8, textDecoration: 'none',
+                color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', fontWeight: 600,
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>🏷️</span> <span>Bidding ↗</span>
+            </Link>
+            <Link
+              to="/logistics"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.6rem',
+                padding: '0.5rem 0.75rem', borderRadius: 8, textDecoration: 'none',
+                color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', fontWeight: 600,
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>🚛</span> <span>Logistics ↗</span>
+            </Link>
+          </div>
+        </div>
+
         {/* Logout */}
         <button
           onClick={logout}
           style={{
             display: 'flex', alignItems: 'center', gap: '0.75rem',
-            padding: '0.7rem 1rem', borderRadius: 10, marginTop: '2rem', width: '100%',
+            padding: '0.7rem 1rem', borderRadius: 10, marginTop: '1.5rem', width: '100%',
             background: 'rgba(239,83,80,0.08)', border: '1px solid rgba(239,83,80,0.2)',
             color: '#ef5350', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.875rem',
             cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s ease',
@@ -232,39 +339,96 @@ export default function AdminDashboard() {
               background: 'rgba(124,92,255,0.15)', border: '1px solid rgba(124,92,255,0.3)',
               color: '#7C5CFF', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em',
             }}>⚙️ ADMIN PANEL</span>
-            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>Restricted Access</span>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem' }}>Full Platform Control</span>
           </div>
           <h1 style={{ color: 'white', fontFamily: 'var(--font-heading)', fontSize: '1.9rem', fontWeight: 800, marginBottom: '0.25rem' }}>
-            {activeSection === 'overview'   && 'Platform Overview'}
-            {activeSection === 'complaints' && 'Complaint Desk'}
-            {activeSection === 'users'      && 'User Management'}
-            {activeSection === 'listings'   && 'Listing Management'}
-            {activeSection === 'system'     && 'System Controls'}
+            {activeSection === 'overview'    && 'Platform Overview & Telemetry'}
+            {(activeSection === 'marketplace' || activeSection === 'listings') && 'Marketplace Crop Lots & Fraud Moderation'}
+            {activeSection === 'bidding'     && 'Auction Desk & Bidding Fraud Moderation'}
+            {activeSection === 'logistics'   && 'Logistics Fleet & Dispatch Telemetry'}
+            {activeSection === 'complaints'  && 'Complaint Desk & Grievance Arbitration'}
+            {activeSection === 'users'       && 'User Management & Access Control'}
+            {activeSection === 'system'      && 'System & AI Engine Controls'}
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>
-            Agri Direct Admin Dashboard · Grievance arbitration and live platform telemetry
+            Agri Direct Admin Dashboard · Grievance arbitration, crop moderation, auction supervision, and live platform telemetry
           </p>
         </div>
 
         {/* ── OVERVIEW ── */}
         {activeSection === 'overview' && (
           <>
-            {/* Stats grid */}
+            {/* Quick Live Portal Access Cards */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem',
+            }}>
+              {[
+                { to: '/marketplace', icon: '🛒', label: 'Marketplace', sub: `${liveListings.length} Active Lots`, color: '#00E5C7', action: () => setActiveSection('marketplace') },
+                { to: '/dashboard',   icon: '📊', label: 'User Dashboard', sub: 'Portal Preview', color: '#4CAF50', action: () => setActiveSection('overview') },
+                { to: '/bidding',     icon: '🏷️', label: 'Bidding Auctions', sub: `${liveBids.length} Live Offers`, color: '#F5A623', action: () => setActiveSection('bidding') },
+                { to: '/logistics',   icon: '🚛', label: 'Logistics Fleet', sub: '3 Dispatches', color: '#7C5CFF', action: () => setActiveSection('logistics') },
+              ].map((c, i) => (
+                <div key={i} style={{
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: 14, padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.6rem',
+                  transition: 'all 0.2s ease',
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: `${c.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
+                      {c.icon}
+                    </div>
+                    <Link
+                      to={c.to}
+                      style={{
+                        fontSize: '0.72rem', color: c.color, textDecoration: 'none', fontWeight: 700,
+                        padding: '2px 8px', borderRadius: 6, background: `${c.color}15`, border: `1px solid ${c.color}35`,
+                      }}
+                    >
+                      Open Page ↗
+                    </Link>
+                  </div>
+                  <div>
+                    <div style={{ color: 'white', fontWeight: 700, fontSize: '0.95rem' }}>{c.label}</div>
+                    <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.75rem' }}>{c.sub}</div>
+                  </div>
+                  <button
+                    onClick={c.action}
+                    style={{
+                      background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.7)',
+                      fontSize: '0.75rem', textAlign: 'left', padding: 0, cursor: 'pointer', fontWeight: 600,
+                      marginTop: '0.2rem'
+                    }}
+                  >
+                    Manage in Admin ↓
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Stats grid (Interactive) */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
               {platformStats.map((s, i) => (
-                <div key={i} style={{
-                  background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '1.25rem 1.5rem',
-                  display: 'flex', alignItems: 'flex-start', gap: '1rem',
-                  transition: 'transform 0.2s ease',
-                }}>
+                <div
+                  key={i}
+                  onClick={() => setActiveSection(s.id)}
+                  style={{
+                    background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '1.25rem 1.5rem',
+                    display: 'flex', alignItems: 'flex-start', gap: '1rem',
+                    cursor: 'pointer', transition: 'all 0.2s ease',
+                  }}
+                  title={`View ${s.label} section`}
+                >
                   <div style={{
                     width: 46, height: 46, borderRadius: 12, flexShrink: 0,
                     background: `${s.color}18`, border: `1px solid ${s.color}30`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem',
                   }}>{s.icon}</div>
-                  <div>
-                    <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', marginBottom: '0.25rem' }}>{s.label}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', marginBottom: '0.25rem' }}>{s.label}</div>
+                      <span style={{ fontSize: '0.7rem', color: s.color, fontWeight: 700 }}>View →</span>
+                    </div>
                     <div style={{ color: 'white', fontWeight: 800, fontSize: '1.5rem', fontFamily: 'var(--font-heading)', lineHeight: 1 }}>{s.value}</div>
                     <div style={{ color: s.color, fontSize: '0.72rem', marginTop: '0.3rem', fontWeight: 600 }}>{s.change}</div>
                   </div>
@@ -627,9 +791,29 @@ export default function AdminDashboard() {
           </SectionCard>
         )}
 
-        {/* ── LISTINGS & FRAUD WATCH ── */}
-        {activeSection === 'listings' && (
+        {/* ── MARKETPLACE LISTINGS ── */}
+        {(activeSection === 'marketplace' || activeSection === 'listings') && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <h2 style={{ color: 'white', fontSize: '1.25rem', margin: 0 }}>Active Marketplace Crop Lots</h2>
+                <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.82rem', margin: '4px 0 0' }}>
+                  Supervise verified crops published by farmers. Remove fraudulent or fake postings instantly.
+                </p>
+              </div>
+              <Link
+                to="/marketplace"
+                style={{
+                  background: 'linear-gradient(135deg, #00E5C7, #052E2B)', color: 'white',
+                  padding: '0.6rem 1.25rem', borderRadius: 10, textDecoration: 'none',
+                  fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px',
+                  boxShadow: '0 4px 15px rgba(0,229,199,0.2)',
+                }}
+              >
+                <span>🛒</span> Open Live Marketplace ↗
+              </Link>
+            </div>
+
             {/* Live Crop Listings Table with Fraud Action */}
             <SectionCard title="Active Marketplace Crop Listings" badge={`${liveListings.length} Active`}>
               <div style={{ overflowX: 'auto' }}>
@@ -685,6 +869,31 @@ export default function AdminDashboard() {
                 </table>
               </div>
             </SectionCard>
+          </div>
+        )}
+
+        {/* ── BIDDING DESK & AUCTION MODERATION ── */}
+        {activeSection === 'bidding' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <h2 style={{ color: 'white', fontSize: '1.25rem', margin: 0 }}>Marketplace Bidding & Auction Desk</h2>
+                <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.82rem', margin: '4px 0 0' }}>
+                  Supervise live bidder participation, detect shill bidding, and cancel fraudulent buyer offers.
+                </p>
+              </div>
+              <Link
+                to="/bidding"
+                style={{
+                  background: 'linear-gradient(135deg, #F5A623, #7C5CFF)', color: 'white',
+                  padding: '0.6rem 1.25rem', borderRadius: 10, textDecoration: 'none',
+                  fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px',
+                  boxShadow: '0 4px 15px rgba(245,166,35,0.25)',
+                }}
+              >
+                <span>🏷️</span> Open Live Bidding Desk ↗
+              </Link>
+            </div>
 
             {/* Bidding Fraud Moderation Desk */}
             <SectionCard title="Marketplace Bidding Fraud Moderation Watch" badge={`${liveBids.length} Total Bids`}>
@@ -747,6 +956,83 @@ export default function AdminDashboard() {
                         </tr>
                       ))
                     )}
+                  </tbody>
+                </table>
+              </div>
+            </SectionCard>
+          </div>
+        )}
+
+        {/* ── LOGISTICS FLEET & DISPATCH TELEMETRY ── */}
+        {activeSection === 'logistics' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <h2 style={{ color: 'white', fontSize: '1.25rem', margin: 0 }}>Logistics Fleet & Dispatch Telemetry</h2>
+                <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.82rem', margin: '4px 0 0' }}>
+                  Real-time GPS transit monitoring, driver communication, and AI delivery route telemetry.
+                </p>
+              </div>
+              <Link
+                to="/logistics"
+                style={{
+                  background: 'linear-gradient(135deg, #42A5F5, #7C5CFF)', color: 'white',
+                  padding: '0.6rem 1.25rem', borderRadius: 10, textDecoration: 'none',
+                  fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px',
+                  boxShadow: '0 4px 15px rgba(66,165,245,0.25)',
+                }}
+              >
+                <span>🚛</span> Open Live Logistics Map ↗
+              </Link>
+            </div>
+
+            {/* Active Fleet Dispatches Table */}
+            <SectionCard title="Active Logistics Shipments & Fleet Units" badge={`${activeLogisticsShipments.length} Dispatched`}>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr>
+                      {['Trip ID', 'Cargo / Lot', 'Driver & Phone', 'Vehicle Unit', 'Transit Route', 'Progress & Status', 'ETA'].map(h => (
+                        <th key={h} style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', fontWeight: 700, padding: '0.6rem 1rem', textAlign: 'left', letterSpacing: '0.06em', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                          {h.toUpperCase()}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {activeLogisticsShipments.map((s, i) => (
+                      <tr key={s.id || i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                        <td style={{ ...tdStyle, fontFamily: 'monospace', color: '#42A5F5', fontWeight: 700 }}>{s.id}</td>
+                        <td style={{ ...tdStyle, color: 'white', fontWeight: 700 }}>
+                          <div>{s.crop}</div>
+                          <small style={{ color: 'rgba(255,255,255,0.4)' }}>Lot: {s.lotId}</small>
+                        </td>
+                        <td style={tdStyle}>
+                          <div style={{ color: 'white', fontWeight: 600 }}>{s.driver}</div>
+                          <small style={{ color: 'rgba(255,255,255,0.45)' }}>{s.driverPhone}</small>
+                        </td>
+                        <td style={{ ...tdStyle, color: '#E2E8F0', fontSize: '0.82rem' }}>{s.vehicle}</td>
+                        <td style={{ ...tdStyle, color: 'rgba(255,255,255,0.7)', fontSize: '0.82rem', maxWidth: 220 }}>
+                          {s.route}
+                        </td>
+                        <td style={tdStyle}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: 4 }}>
+                            <span style={{
+                              background: `${s.statusColor}20`, color: s.statusColor,
+                              border: `1px solid ${s.statusColor}40`,
+                              padding: '2px 8px', borderRadius: 10, fontSize: '0.7rem', fontWeight: 800
+                            }}>
+                              {s.status.toUpperCase()}
+                            </span>
+                            <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)' }}>{s.progress}%</span>
+                          </div>
+                          <div style={{ width: 120, height: 5, background: 'rgba(255,255,255,0.08)', borderRadius: 3, overflow: 'hidden' }}>
+                            <div style={{ width: `${s.progress}%`, height: '100%', background: s.statusColor, borderRadius: 3 }} />
+                          </div>
+                        </td>
+                        <td style={{ ...tdStyle, color: '#FBBF24', fontWeight: 600, fontSize: '0.82rem' }}>{s.eta}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

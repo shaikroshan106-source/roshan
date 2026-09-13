@@ -1,0 +1,51 @@
+[
+  {
+    "id": "TXN_1789192113889_2244",
+    "orderId": "ORD_2026_695081",
+    "payerId": "buyer_srinivas",
+    "payerName": "Srinivas M.",
+    "payeeId": "agridirect_escrow",
+    "payeeName": "AgriDirect Instant Escrow",
+    "type": "escrow_deposit",
+    "amount": 8870,
+    "currency": "INR",
+    "paymentGateway": "Razorpay",
+    "status": "pending",
+    "createdAt": "2026-09-12T05:48:33.890Z",
+    "updatedAt": "2026-09-12T05:48:33.890Z"
+  },
+  {
+    "id": "TXN_1725530002",
+    "orderId": "ORD_2026_1001",
+    "payerId": "agridirect_escrow",
+    "payerName": "AgriDirect Instant Escrow",
+    "payeeId": "farmer_ravi",
+    "payeeName": "Ravi Kumar",
+    "type": "farmer_payout",
+    "amount": 51200,
+    "currency": "INR",
+    "paymentGateway": "UPI",
+    "gatewayRefId": "upi_ref_9281048102",
+    "status": "settled",
+    "settledAt": "2026-09-05T16:05:00.000Z",
+    "createdAt": "2026-09-05T16:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:34.950Z"
+  },
+  {
+    "id": "TXN_1725450001",
+    "orderId": "ORD_2026_1001",
+    "payerId": "buyer_srinivas",
+    "payerName": "Srinivas Agro Exports Pvt Ltd",
+    "payeeId": "agridirect_escrow",
+    "payeeName": "AgriDirect Instant Escrow",
+    "type": "escrow_deposit",
+    "amount": 53512,
+    "currency": "INR",
+    "paymentGateway": "Razorpay",
+    "gatewayRefId": "pay_Hj92019a8bc",
+    "status": "settled",
+    "settledAt": "2026-09-04T12:10:00.000Z",
+    "createdAt": "2026-09-04T12:05:00.000Z",
+    "updatedAt": "2026-09-12T05:30:34.947Z"
+  }
+]

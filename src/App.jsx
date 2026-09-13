@@ -28,12 +28,12 @@ export default function App() {
           <Route path="/ai"      element={<Navigate to="/marketplace" replace />} />
           <Route path="/login"   element={<Login />} />
 
-          {/* ── Protected (Farmer & Buyer) ──────────────── */}
-          <Route path="/report"      element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Report /></ProtectedRoute>} />
-          <Route path="/marketplace" element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Marketplace /></ProtectedRoute>} />
-          <Route path="/dashboard"   element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Dashboard /></ProtectedRoute>} />
-          <Route path="/bidding"     element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Bidding /></ProtectedRoute>} />
-          <Route path="/logistics"   element={<ProtectedRoute allowedRoles={['farmer', 'buyer']}><Logistics /></ProtectedRoute>} />
+          {/* ── Protected (Farmer, Buyer & Admin) ───────── */}
+          <Route path="/report"      element={<ProtectedRoute allowedRoles={['farmer', 'buyer', 'admin']}><Report /></ProtectedRoute>} />
+          <Route path="/marketplace" element={<ProtectedRoute allowedRoles={['farmer', 'buyer', 'admin']}><Marketplace /></ProtectedRoute>} />
+          <Route path="/dashboard"   element={<ProtectedRoute allowedRoles={['farmer', 'buyer', 'admin']}><Dashboard /></ProtectedRoute>} />
+          <Route path="/bidding"     element={<ProtectedRoute allowedRoles={['farmer', 'buyer', 'admin']}><Bidding /></ProtectedRoute>} />
+          <Route path="/logistics"   element={<ProtectedRoute allowedRoles={['farmer', 'buyer', 'admin']}><Logistics /></ProtectedRoute>} />
 
           {/* ── Admin only ──────────────────────────────── */}
           <Route path="/admin" element={<ProtectedRoute adminOnly allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />

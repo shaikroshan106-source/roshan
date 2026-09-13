@@ -1,0 +1,63 @@
+[
+  {
+    "buyerId": "buyer_krishna",
+    "companyName": "Krishna Fresh Foods",
+    "businessType": "Wholesaler",
+    "gstin": "37AAECK9928A1Z2",
+    "verifiedBuyer": true,
+    "preferredCrops": [
+      "Tomato",
+      "Rice"
+    ],
+    "preferredGrades": [
+      "A",
+      "B+"
+    ],
+    "maxBudget": 1000000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Vijayawada Central Mandi Cold Storage",
+        "address": "NH-16 By-pass",
+        "district": "Vijayawada",
+        "pincode": "520001"
+      }
+    ],
+    "totalPurchases": 19,
+    "totalSpent": 420000,
+    "buyerRating": 4.5,
+    "createdAt": "2026-09-03T10:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:32.874Z",
+    "id": "buyer_krishna"
+  },
+  {
+    "buyerId": "buyer_srinivas",
+    "companyName": "Srinivas Agro Exports Pvt Ltd",
+    "businessType": "Exporter",
+    "gstin": "37AABCS1429B1Z8",
+    "verifiedBuyer": true,
+    "preferredCrops": [
+      "Chilli",
+      "Cotton",
+      "Rice"
+    ],
+    "preferredGrades": [
+      "A+",
+      "A"
+    ],
+    "maxBudget": 2500000,
+    "deliveryWarehouses": [
+      {
+        "hubName": "Guntur Export Depot",
+        "address": "Plot 42, Auto Nagar",
+        "district": "Guntur",
+        "pincode": "522001"
+      }
+    ],
+    "totalPurchases": 28,
+    "totalSpent": 850000,
+    "buyerRating": 4.8,
+    "createdAt": "2026-09-02T09:00:00.000Z",
+    "updatedAt": "2026-09-12T05:30:32.871Z",
+    "id": "buyer_srinivas"
+  }
+]
