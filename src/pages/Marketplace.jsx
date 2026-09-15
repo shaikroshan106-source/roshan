@@ -415,18 +415,19 @@ export default function Marketplace() {
   }
 
   // Handle submitting live bid from marketplace
-  function handlePlaceBidSubmit(e) {
+  async function handlePlaceBidSubmit(e) {
     e.preventDefault();
     if (!selectedLotForBid) return;
-    const res = placeBidOnLot(selectedLotForBid.id, {
-      buyerName: buyerBidName,
-      buyerPhone: user?.phone || '+91 98765 00000',
+    setBuyerBidFeedback('⏳ Placing your bid...');
+    const res = await placeBidOnLot(selectedLotForBid.id, {
+      buyerName: buyerBidName || user?.name || 'Verified Buyer',
+      buyerPhone: user?.phone || '+91 87654 32109',
       amount: Number(buyerBidAmount),
     });
 
     if (res.success) {
       setBuyerBidFeedback(res.message);
-      setSuccessToast(`🎉 Offer of ₹${buyerBidAmount}/kg directly added to Bidding section! You are the highest bidder.`);
+      setSuccessToast(res.message || `🎉 Offer of ₹${buyerBidAmount}/kg directly added to Bidding section! You are the highest bidder.`);
       setTimeout(() => {
         setBiddingModalOpen(false);
         setBuyerBidFeedback('');

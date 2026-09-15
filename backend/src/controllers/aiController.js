@@ -139,4 +139,15 @@ export const aiController = {
       return res.status(500).json({ success: false, message: err.message });
     }
   },
+
+  // 8. Live Google Connected Market Rates for Farmer's Location
+  async getLiveMarketRates(req, res) {
+    try {
+      const { location = 'Guntur' } = req.query;
+      const result = await aiService.getLiveGoogleMarketRates(location);
+      return res.json({ success: true, data: result });
+    } catch (err) {
+      return res.status(500).json({ success: false, message: err.message });
+    }
+  },
 };

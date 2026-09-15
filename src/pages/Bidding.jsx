@@ -13,6 +13,7 @@ import {
   cancelBidOnLot,
   removeFraudulentBid,
   removeFraudulentListing,
+  syncBiddingFromBackend,
 } from '../utils/biddingStore';
 import { resolveProduceImage } from '../utils/produceImageResolver';
 import biddingHeroImg from '../assets/bidding-hero.jpg';
@@ -148,6 +149,15 @@ export default function Bidding() {
   const [editingBid, setEditingBid] = useState(null);
   const [editBidAmount, setEditBidAmount] = useState('');
 
+  // ── Functional Bidding Countdown Timer State ─────────────────────────────
+  const [timeRemaining, setTimeRemaining] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    expired: false,
+    formatted: '--:--:--',
+  });
+
   // Sync state on load and on custom events
   function refreshBiddingData() {
     const updatedLots = getBiddingLots();
@@ -164,6 +174,15 @@ export default function Bidding() {
     window.addEventListener('farmflow_bidding_updated', refreshBiddingData);
     return () => window.removeEventListener('farmflow_bidding_updated', refreshBiddingData);
   }, [activeLotId]);
+
+  // ── Live Stream Polling from Backend (Near Real-Time Updates) ─────────────
+  useEffect(() => {
+    syncBiddingFromBackend();
+    const livePollInterval = setInterval(() => {
+      syncBiddingFromBackend();
+    }, 3000);
+    return () => clearInterval(livePollInterval);
+  }, []);
 
   // Check URL query parameters (e.g. ?lotId=L002)
   useEffect(() => {
@@ -255,8 +274,53 @@ export default function Bidding() {
   const isLotAccepted = activeLot.status === 'accepted';
   const winningBid = activeLot.acceptedBid || lotBids.find(b => b.status === 'accepted');
 
+  // ── Authentic Countdown Timer Effect ──────────────────────────────────────
+  useEffect(() => {
+    if (!activeLot?.endTime) {
+      setTimeRemaining({ hours: 0, minutes: 0, seconds: 0, expired: false, formatted: '--:--:--' });
+      return;
+    }
+
+    const calculateCountdown = () => {
+      const targetTime = new Date(activeLot.endTime).getTime();
+      const now = Date.now();
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        setTimeRemaining({
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          expired: true,
+          formatted: '00h 00m 00s (Auction Ended)',
+        });
+        return;
+      }
+
+      const totalSec = Math.floor(diff / 1000);
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      const pad = (num) => String(num).padStart(2, '0');
+
+      setTimeRemaining({
+        hours: h,
+        minutes: m,
+        seconds: s,
+        expired: false,
+        formatted: `${pad(h)}h ${pad(m)}m ${pad(s)}s`,
+      });
+    };
+
+    calculateCountdown();
+    const timerInterval = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(timerInterval);
+  }, [activeLot?.endTime, activeLot?.id]);
+
+  const isAuctionExpired = timeRemaining.expired || activeLot.status === 'closed';
+
   // ── BUYER: Handle Place Bid ───────────────────────────────────────────────
-  const handlePlaceBid = (e) => {
+  const handlePlaceBid = async (e) => {
     e.preventDefault();
     if (isFarmer) {
       setPlacedMsg('❌ Farmers cannot place bids on lots. You can publish crops and accept buyer bids.');
@@ -266,19 +330,30 @@ export default function Bidding() {
       setPlacedMsg('❌ This auction is closed. The farmer has already accepted a winning bid.');
       return;
     }
-    if (!bidAmount || !buyerName) {
-      setPlacedMsg('❌ Please enter your buyer name and bid amount.');
+    if (isAuctionExpired) {
+      setPlacedMsg('⏱️ This auction has ended and is now closed for bidding.');
+      return;
+    }
+    const numAmount = Number(bidAmount);
+    if (!numAmount || numAmount <= 0) {
+      setPlacedMsg('❌ Please enter a valid positive bid amount.');
+      return;
+    }
+    if (numAmount <= highestBid) {
+      setPlacedMsg(`❌ Your bid (₹${numAmount}/kg) must be strictly higher than current highest: ₹${highestBid}/kg`);
       return;
     }
 
-    const res = placeBidOnLot(activeLotId, {
-      buyerName: buyerName.trim(),
-      buyerPhone: user?.phone || '+91 98765 00000',
-      amount: Number(bidAmount),
+    setPlacedMsg('⏳ Submitting your bid to live auction...');
+
+    const res = await placeBidOnLot(activeLotId, {
+      buyerName: (buyerName || user?.name || 'Verified Buyer').trim(),
+      buyerPhone: user?.phone || '+91 87654 32109',
+      amount: numAmount,
     });
 
     if (res.success) {
-      setPlacedMsg(`🎉 Offer of ₹${bidAmount}/kg directly added to Bidding section! You are the highest bidder.`);
+      setPlacedMsg(res.message || `🎉 Offer of ₹${numAmount}/kg placed successfully! You are the highest bidder.`);
       refreshBiddingData();
       setTimeout(() => setPlacedMsg(''), 6000);
     } else {
@@ -287,7 +362,7 @@ export default function Bidding() {
   };
 
   // ── FARMER: Handle Publish New Lot for Bidding ────────────────────────────
-  const handlePublishBiddingSubmit = (e) => {
+  const handlePublishBiddingSubmit = async (e) => {
     e.preventDefault();
     const cropName = formCrop === 'Custom' ? (formCustomCrop.trim() || 'Produce') : formCrop;
     const selectedPreset = cropPresetOptions.find(c => c.name === cropName);
@@ -304,9 +379,10 @@ export default function Bidding() {
       location: user?.location || 'Vizag',
       description: formDescription || `Fresh ${cropName} harvested directly in ${user?.location || 'Vizag'}. Available for live verified auction.`,
       imageUrl: resolveProduceImage(cropName, selectedPreset?.img),
+      endTime: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(),
     };
 
-    const updated = publishBiddingLot(newLot);
+    const updated = await publishBiddingLot(newLot);
     setLots(updated);
     setActiveLotId(updated[0].id);
     setPublishModalOpen(false);
@@ -315,9 +391,10 @@ export default function Bidding() {
   };
 
   // ── FARMER: Handle Confirm Bid Acceptance ─────────────────────────────────
-  const handleConfirmAcceptBid = () => {
+  const handleConfirmAcceptBid = async () => {
     if (!acceptDialogBid) return;
-    const res = acceptBidForLot(activeLotId, acceptDialogBid.id);
+    setActionNotice('⏳ Finalizing accepted bid...');
+    const res = await acceptBidForLot(activeLotId, acceptDialogBid.id);
     if (res.success) {
       setActionNotice(res.message);
       setAcceptDialogBid(null);
@@ -328,9 +405,9 @@ export default function Bidding() {
   };
 
   // ── FARMER: Handle Reject Bid ─────────────────────────────────────────────
-  const handleRejectBid = (bid) => {
+  const handleRejectBid = async (bid) => {
     if (window.confirm(`Decline offer of ₹${bid.amount}/kg from ${bid.buyer}? The buyer will be notified.`)) {
-      const res = rejectBidForLot(activeLotId, bid.id);
+      const res = await rejectBidForLot(activeLotId, bid.id);
       if (res.success) {
         setActionNotice(res.message);
         refreshBiddingData();
@@ -871,9 +948,51 @@ export default function Bidding() {
                       {activeLot.crop} — {activeLot.quantity} kg
                     </h3>
                   </div>
-                  <span className={`badge ${isLotAccepted ? 'badge-green' : 'badge-gold'}`} style={{ fontSize: '0.75rem', padding: '0.3rem 0.75rem' }}>
-                    {isLotAccepted ? '✅ Bid Accepted' : '🟢 Live Bidding'}
+                  <span className={`badge ${isLotAccepted ? 'badge-green' : isAuctionExpired ? 'badge-red' : 'badge-gold'}`} style={{ fontSize: '0.75rem', padding: '0.3rem 0.75rem' }}>
+                    {isLotAccepted ? '✅ Bid Accepted' : isAuctionExpired ? '🔒 Auction Closed' : '🟢 Live Bidding'}
                   </span>
+                </div>
+
+                {/* Live Functional Countdown Timer */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.65rem 0.95rem',
+                  background: isLotAccepted
+                    ? '#ECFDF5'
+                    : isAuctionExpired
+                    ? '#FEF2F2'
+                    : 'rgba(245, 166, 35, 0.08)',
+                  border: `1.5px solid ${
+                    isLotAccepted
+                      ? '#10B981'
+                      : isAuctionExpired
+                      ? '#F87171'
+                      : 'rgba(245, 166, 35, 0.35)'
+                  }`,
+                  borderRadius: 8,
+                  marginBottom: '1rem',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '1.1rem' }}>⏱️</span>
+                    <span style={{
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      color: isLotAccepted ? '#065F46' : isAuctionExpired ? '#DC2626' : '#92400E'
+                    }}>
+                      {isLotAccepted ? 'Auction Status: Deal Closed' : isAuctionExpired ? 'Auction Status: Expired' : 'Bidding Closes In:'}
+                    </span>
+                  </div>
+                  <div id="bidding-timer-display" style={{
+                    fontSize: '0.88rem',
+                    fontWeight: 800,
+                    fontFamily: 'monospace',
+                    color: isLotAccepted ? '#065F46' : isAuctionExpired ? '#DC2626' : '#B45309',
+                    letterSpacing: '0.04em',
+                  }}>
+                    {isLotAccepted ? '✓ SOLD' : isAuctionExpired ? '🔒 CLOSED' : timeRemaining.formatted}
+                  </div>
                 </div>
 
                 {/* Specs List */}
@@ -933,15 +1052,19 @@ export default function Bidding() {
                     As a verified buyer, enter your bid per kg. The farmer can review and choose your bid to finalize.
                   </p>
 
-                  {isLotAccepted ? (
+                  {isLotAccepted || isAuctionExpired ? (
                     <div style={{
-                      padding: '1rem', borderRadius: 8, background: '#F3F4F6',
+                      padding: '1.25rem', borderRadius: 8, background: '#F3F4F6',
                       border: '1px solid #E5E7EB', textAlign: 'center',
                     }}>
-                      <div style={{ fontSize: '1.5rem', marginBottom: '0.3rem' }}>🔒</div>
-                      <div style={{ fontWeight: 700, color: '#374151', fontSize: '0.9rem' }}>Bidding Closed for this Lot</div>
-                      <p style={{ color: '#6B7280', fontSize: '0.8rem', margin: 0, marginTop: 4 }}>
-                        The farmer has accepted the winning bid of ₹{highestBid}/kg. Select another active lot to bid.
+                      <div style={{ fontSize: '1.75rem', marginBottom: '0.3rem' }}>🔒</div>
+                      <div style={{ fontWeight: 800, color: '#374151', fontSize: '0.95rem' }}>
+                        {isLotAccepted ? 'Bidding Closed — Offer Accepted by Farmer' : 'Bidding Closed — Auction Timer Ended'}
+                      </div>
+                      <p style={{ color: '#6B7280', fontSize: '0.82rem', margin: '4px 0 0' }}>
+                        {isLotAccepted
+                          ? `The farmer accepted the winning offer of ₹${highestBid}/kg. Select another active lot to place bids.`
+                          : 'The countdown timer for this lot has reached zero. No further bids can be accepted.'}
                       </p>
                     </div>
                   ) : (

@@ -1,5 +1,61 @@
 [
   {
+    "id": "NOTIF_1789443219023",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on guava",
+    "message": "Srinivas M. placed an offer of ₹61/kg on your guava lot.",
+    "metadata": {
+      "lotId": "LOT_1789443141414",
+      "bidId": "BID_1789443217993",
+      "amount": 61
+    },
+    "read": false,
+    "createdAt": "2026-09-15T03:33:39.023Z",
+    "updatedAt": "2026-09-15T03:33:39.023Z"
+  },
+  {
+    "id": "NOTIF_MOD_1789443044084",
+    "userId": "farmer_ravi",
+    "type": "LOT_REMOVED",
+    "title": "Listing Removed: Tomato",
+    "message": "Your produce lot \"Tomato\" has been removed by Admin. Reason: Auction lot removed by Admin",
+    "read": false,
+    "createdAt": "2026-09-15T03:30:44.084Z",
+    "updatedAt": "2026-09-15T03:30:44.084Z"
+  },
+  {
+    "id": "NOTIF_1789440641500",
+    "userId": "buyer_srinivas",
+    "type": "BID_ACCEPTED",
+    "title": "Deal Confirmed for Chilli!",
+    "message": "Farmer undefined accepted your offer of ₹68/kg for 800 kg of Chilli. Order ORD_2026_368285 created.",
+    "metadata": {
+      "lotId": "L003",
+      "bidId": "BID_1789440635330",
+      "orderId": "ORD_2026_368285",
+      "totalValue": 56744
+    },
+    "read": false,
+    "createdAt": "2026-09-15T02:50:41.500Z",
+    "updatedAt": "2026-09-15T02:50:41.500Z"
+  },
+  {
+    "id": "NOTIF_1789440636900",
+    "userId": "farmer_ravi",
+    "type": "NEW_BID",
+    "title": "New Offer on Chilli",
+    "message": "Srinivas M. placed an offer of ₹68/kg on your Chilli lot.",
+    "metadata": {
+      "lotId": "L003",
+      "bidId": "BID_1789440635330",
+      "amount": 68
+    },
+    "read": false,
+    "createdAt": "2026-09-15T02:50:36.900Z",
+    "updatedAt": "2026-09-15T02:50:36.900Z"
+  },
+  {
     "id": "NOTIF_1789049749235",
     "userId": "buyer_srinivas",
     "type": "BID_ACCEPTED",

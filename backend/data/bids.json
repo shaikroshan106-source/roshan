@@ -1,5 +1,35 @@
 [
   {
+    "id": "BID_1789443217993",
+    "lotId": "LOT_1789443141414",
+    "productId": "LOT_1789443141414",
+    "buyerId": "buyer_srinivas",
+    "buyer": "Srinivas M.",
+    "buyerName": "Srinivas M.",
+    "buyerPhone": "+91 87654 32109",
+    "amount": 61,
+    "totalOfferValue": 30500,
+    "timestamp": "09:03 am",
+    "status": "highest",
+    "createdAt": "2026-09-15T03:33:37.994Z",
+    "updatedAt": "2026-09-15T03:33:37.994Z"
+  },
+  {
+    "id": "BID_1789440635330",
+    "lotId": "L003",
+    "productId": "L003",
+    "buyerId": "buyer_srinivas",
+    "buyer": "Srinivas M.",
+    "buyerName": "Srinivas M.",
+    "buyerPhone": "+91 87654 32109",
+    "amount": 68,
+    "totalOfferValue": 54400,
+    "timestamp": "08:20 am",
+    "status": "accepted",
+    "createdAt": "2026-09-15T02:50:35.360Z",
+    "updatedAt": "2026-09-15T02:50:39.952Z"
+  },
+  {
     "id": "BID_1789048172111",
     "lotId": "LOT_1789048166921",
     "productId": "LOT_1789048166921",
@@ -57,10 +87,10 @@
     "amount": 191,
     "totalOfferValue": 95500,
     "timestamp": "07:07 pm",
-    "status": "closed",
+    "status": "cancelled",
     "createdAt": "2026-09-10T13:37:15.763Z",
-    "updatedAt": "2026-09-10T13:37:25.470Z",
-    "cancelledAt": "2026-09-10T13:37:18.821Z"
+    "updatedAt": "2026-09-15T02:12:10.146Z",
+    "cancelledAt": "2026-09-15T02:12:09.644Z"
   },
   {
     "id": "BID_1789047429649",
@@ -73,9 +103,9 @@
     "amount": 189,
     "totalOfferValue": 94500,
     "timestamp": "07:07 pm",
-    "status": "accepted",
+    "status": "highest",
     "createdAt": "2026-09-10T13:37:09.649Z",
-    "updatedAt": "2026-09-10T13:37:25.979Z"
+    "updatedAt": "2026-09-15T02:12:11.160Z"
   },
   {
     "id": "BID_1789043343112",
@@ -88,9 +118,10 @@
     "amount": 999,
     "totalOfferValue": 499500,
     "timestamp": "05:59 pm",
-    "status": "closed",
+    "status": "removed_by_admin",
     "createdAt": "2026-09-10T12:29:03.125Z",
-    "updatedAt": "2026-09-10T14:12:33.615Z"
+    "updatedAt": "2026-09-15T03:30:42.532Z",
+    "removedReason": "Auction lot removed by Admin"
   },
   {
     "id": "BID_1789043114318",
@@ -207,10 +238,10 @@
     "buyerPhone": "+91 94411 98765",
     "amount": 64,
     "totalOfferValue": 51200,
-    "status": "highest",
+    "status": "closed",
     "timestamp": "11:30 AM",
     "createdAt": "2026-09-04T11:30:00.000Z",
-    "updatedAt": "2026-09-10T11:56:58.771Z"
+    "updatedAt": "2026-09-15T02:50:40.458Z"
   },
   {
     "id": "BID_004",
@@ -237,10 +268,11 @@
     "buyerPhone": "+91 78930 11223",
     "amount": 29,
     "totalOfferValue": 14500,
-    "status": "accepted",
+    "status": "removed_by_admin",
     "timestamp": "11:02 AM",
     "createdAt": "2026-09-02T11:02:00.000Z",
-    "updatedAt": "2026-09-10T14:12:34.134Z"
+    "updatedAt": "2026-09-15T03:30:43.046Z",
+    "removedReason": "Auction lot removed by Admin"
   },
   {
     "id": "BID_002",
@@ -252,10 +284,11 @@
     "buyerPhone": "+91 89781 44556",
     "amount": 28.5,
     "totalOfferValue": 14250,
-    "status": "closed",
+    "status": "removed_by_admin",
     "timestamp": "10:45 AM",
     "createdAt": "2026-09-02T10:45:00.000Z",
-    "updatedAt": "2026-09-10T14:12:34.643Z"
+    "updatedAt": "2026-09-15T03:30:43.567Z",
+    "removedReason": "Auction lot removed by Admin"
   },
   {
     "id": "BID_001",
@@ -267,9 +300,10 @@
     "buyerPhone": "+91 98490 22334",
     "amount": 27.5,
     "totalOfferValue": 13750,
-    "status": "closed",
+    "status": "removed_by_admin",
     "timestamp": "10:32 AM",
     "createdAt": "2026-09-02T10:32:00.000Z",
-    "updatedAt": "2026-09-10T14:12:35.154Z"
+    "updatedAt": "2026-09-15T03:30:44.082Z",
+    "removedReason": "Auction lot removed by Admin"
   }
 ]

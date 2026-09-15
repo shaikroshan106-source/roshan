@@ -75,4 +75,8 @@ export const api = {
       body: JSON.stringify(body),
     });
   },
+
+  getLiveMarketRates(location = 'Guntur') {
+    return this.get(`/ai/live-market-rates?location=${encodeURIComponent(location)}`);
+  },
 };

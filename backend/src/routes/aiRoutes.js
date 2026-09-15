@@ -29,4 +29,7 @@ router.post('/match-buyers', aiController.matchBuyers);
 router.post('/optimize-profit', aiController.optimizeProfit);
 router.post('/optimize-route', aiController.recommendRoute);
 
+// 8. Live Google Connected Market Rates for Farmer's Location
+router.get('/live-market-rates', aiController.getLiveMarketRates);
+
 export default router;

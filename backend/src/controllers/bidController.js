@@ -72,6 +72,14 @@ export const bidController = {
       if (lot.status === 'accepted' || lot.status === 'closed') {
         return res.status(400).json({ success: false, message: 'This auction lot is already closed or accepted.' });
       }
+
+      // Check auction timer expiry
+      if (lot.endTime && new Date(lot.endTime).getTime() <= Date.now()) {
+        await firestoreService.update('products', lotId, { status: 'closed' }).catch(() => {});
+        await firestoreService.update('listings', lotId, { status: 'closed' }).catch(() => {});
+        return res.status(400).json({ success: false, message: '⏱️ This auction has ended and is now closed for bidding.' });
+      }
+
       if (lot.farmerId === user.uid) {
         return res.status(403).json({ success: false, message: 'Farmers cannot place bids on their own produce lots.' });
       }
@@ -81,7 +89,8 @@ export const bidController = {
       const activeLotBids = allBids.filter(b =>
         (b.lotId === lotId || b.productId === lotId) &&
         b.status !== 'removed_by_admin' &&
-        b.status !== 'rejected'
+        b.status !== 'rejected' &&
+        b.status !== 'cancelled'
       );
       const currentHighest = activeLotBids.length > 0
         ? Math.max(...activeLotBids.map(b => Number(b.amount) || 0))
@@ -90,21 +99,28 @@ export const bidController = {
       if (numAmount <= currentHighest) {
         return res.status(400).json({
           success: false,
-          message: `Your bid of ₹${numAmount}/kg must be strictly higher than the current highest: ₹${currentHighest}/kg`,
+          message: `Your bid of ₹${numAmount}/kg must be strictly higher than the current highest bid: ₹${currentHighest}/kg`,
         });
       }
 
       const bidId = `BID_${Date.now()}`;
+      const lotQty = Number(lot.quantity) || 1;
       const newBid = {
         id: bidId,
         lotId,
         productId: lotId,
         buyerId: user.uid || 'buyer_srinivas',
-        buyer: buyerName || user.name || 'Verified Buyer',
-        buyerName: buyerName || user.name || 'Verified Buyer',
-        buyerPhone: buyerPhone || user.phone || '+91 98765 00000',
+        buyer: user.name || buyerName || 'Verified Buyer',
+        buyerName: user.name || buyerName || 'Verified Buyer',
+        buyerPhone: user.phone || buyerPhone || '+91 87654 32109',
+        farmerId: lot.farmerId || 'farmer_ravi',
+        farmerName: lot.farmerName || lot.farmer || 'Farmer',
+        cropId: lot.id,
+        cropName: lot.crop || 'Produce',
+        crop: lot.crop || 'Produce',
+        quantity: lotQty,
         amount: numAmount,
-        totalOfferValue: numAmount * (Number(lot.quantity) || 100),
+        totalOfferValue: numAmount * lotQty,
         timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
         status: 'highest',
         createdAt: new Date().toISOString(),

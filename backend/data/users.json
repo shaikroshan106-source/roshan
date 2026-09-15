@@ -88,8 +88,8 @@
     "status": "active",
     "accessLevel": "Full System Access",
     "id": "demo_admin_hq",
-    "updatedAt": "2026-09-12T01:51:54.940Z",
-    "createdAt": "2026-09-12T01:51:54.940Z",
+    "updatedAt": "2026-09-15T03:30:12.231Z",
+    "createdAt": "2026-09-15T03:30:12.231Z",
     "verified": true
   },
   {
@@ -154,18 +154,21 @@
   {
     "uid": "buyer_srinivas",
     "email": "procurement@srinivasagro.com",
-    "phone": "+918765432109",
+    "phone": "+91 87654 32109",
     "name": "Srinivas M.",
     "role": "buyer",
     "location": "Guntur",
     "state": "Andhra Pradesh",
     "status": "active",
     "preferredLanguage": "en",
-    "createdAt": "2026-09-02T09:00:00.000Z",
-    "updatedAt": "2026-09-10T13:37:01.509Z",
+    "createdAt": "2026-09-15T03:32:58.513Z",
+    "updatedAt": "2026-09-15T03:32:58.513Z",
     "id": "buyer_srinivas",
     "suspendedReason": null,
-    "suspendedAt": null
+    "suspendedAt": null,
+    "verified": true,
+    "totalPurchases": 28,
+    "spent": 850000
   },
   {
     "uid": "farmer_ravi",
@@ -177,8 +180,8 @@
     "state": "Andhra Pradesh",
     "status": "active",
     "preferredLanguage": "te",
-    "createdAt": "2026-09-10T14:15:30.179Z",
-    "updatedAt": "2026-09-10T14:15:30.179Z",
+    "createdAt": "2026-09-15T03:34:47.193Z",
+    "updatedAt": "2026-09-15T03:34:47.193Z",
     "id": "farmer_ravi",
     "verified": true,
     "totalLots": 12,

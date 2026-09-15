@@ -151,12 +151,12 @@
       "Chilli",
       "Rice"
     ],
-    "totalLotsListed": 19,
+    "totalLotsListed": 20,
     "totalVolumeSold": 28500,
     "totalRevenue": 245000,
     "farmerRating": 4.9,
     "createdAt": "2026-09-01T08:00:00.000Z",
-    "updatedAt": "2026-09-10T13:37:52.304Z",
+    "updatedAt": "2026-09-15T03:32:22.442Z",
     "id": "farmer_ravi",
     "acreage": 18.5
   }
